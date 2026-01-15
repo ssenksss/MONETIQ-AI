@@ -37,6 +37,7 @@
     "jsdom": "^27.4.0",
     "npm-run-all2": "^8.0.4",
     "prettier": "3.7.4",
+    "sass": "^1.97.2",
     "typescript": "~5.9.3",
     "vite": "beta",
     "vite-plugin-vue-devtools": "^8.0.5",
