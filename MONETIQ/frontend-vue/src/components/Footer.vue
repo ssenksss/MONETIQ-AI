@@ -1,17 +1,22 @@
 <template>
   <footer class="footer">
-    <p>&copy; 2026 MONETIQ AI. All rights reserved.</p>
+    © 2026 MONETIQ AI — All rights reserved.
   </footer>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
 
-<style scoped>
+
+<style lang="scss" scoped>
+@import "../assets/styles/variables.scss";
+
 .footer {
+  padding: $spacing-lg;
   text-align: center;
-  padding: 1rem;
+  color: $text-muted;
   font-size: 0.9rem;
-  color: #B0B0B0;
   margin-top: auto;
+  border-top: 1px solid $border-soft;
 }
 </style>

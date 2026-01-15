@@ -11,37 +11,31 @@
 <script setup lang="ts">
 import { PropType } from 'vue'
 
-interface Suggestion {
-  text: string
-  day?: number
-}
+interface Suggestion { text: string; day?: number }
+interface Profile { username: string; suggestions: Suggestion[]; analysisDate: string }
 
-interface Profile {
-  username: string
-  suggestions: Suggestion[]
-  analysisDate: string
-}
-
-const props = defineProps<{
-  profile: Profile
-}>()
+const props = defineProps<{ profile: Profile }>()
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "../assets/styles/variables.scss";
+
 .profile-card {
-  border: 1px solid #E5E5E5;
-  padding: 1rem;
+  border: 1px solid $border-soft;
   border-radius: 0.5rem;
-  margin: 1rem 0;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-.profile-card h3 {
-  color: #1E3A8A;
-  margin-bottom: 0.5rem;
-}
-.profile-card ul {
-  padding-left: 1.2rem;
-  color: #555;
+  padding: $spacing-md;
+  margin: $spacing-md 0;
+  background: $bg-light;
+  box-shadow: $shadow-soft;
+
+  h3 {
+    color: $primary;
+    margin-bottom: $spacing-sm;
+  }
+
+  ul {
+    padding-left: 1rem;
+    color: $text-muted;
+  }
 }
 </style>

@@ -1,73 +1,79 @@
 <template>
-  <div class="pricing-card">
-    <h3 class="tier">{{ tier }}</h3>
+  <div class="card" :class="{ highlight }">
+    <h3>{{ tier }}</h3>
     <p class="price">{{ price }}</p>
-    <ul class="features">
-      <li v-for="(feature, index) in features" :key="index">{{ feature }}</li>
+    <ul>
+      <li v-for="(f, i) in features" :key="i">✓ {{ f }}</li>
     </ul>
-    <button class="buy-btn">Get Started</button>
+    <button>{{ highlight ? 'Most Popular' : 'Get Started' }}</button>
   </div>
 </template>
 
-<script lang="ts" setup>
-interface Props {
+<script setup lang="ts">
+defineProps<{
   tier: string
   price: string
   features: string[]
-}
-
-const props = defineProps<Props>()
+  highlight?: boolean
+}>()
 </script>
 
-<style scoped>
-.pricing-card {
-  border: 1px solid #e0e0e0;
-  border-radius: 16px;
-  padding: 2rem;
-  width: 280px;
+<style lang="scss" scoped>
+@import "../../assets/styles/variables.scss";
+
+
+
+.card {
+  background: $bg-light;
+  border-radius: 20px;
+  padding: 2.5rem;
+  width: 300px;
   text-align: center;
-  background-color: #ffffff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease;
-}
+  border: 1px solid $border-soft;
+  box-shadow: $shadow-soft;
+  transition: all 0.2s ease;
 
-.pricing-card:hover {
-  transform: translateY(-6px);
-}
+  &.highlight {
+    border: 2px solid $primary;
+    transform: translateY(-10px);
+  }
 
-.tier {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
+  h3 {
+    font-size: 1.6rem;
+  }
 
-.price {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: #10B981; /* tirkizno-zelena */
-}
+  .price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $primary;
+    margin: 1rem 0;
+  }
 
-.features {
-  text-align: left;
-  margin-bottom: 1.5rem;
-}
+  ul {
+    text-align: left;
+    margin: 1.5rem 0;
+    padding: 0;
+    list-style: none;
+    color: $text-muted;
+  }
 
-.features li {
-  margin-bottom: 0.5rem;
-}
+  li {
+    margin-bottom: 0.5rem;
+  }
 
-.buy-btn {
-  background: linear-gradient(90deg, #10B981, #1F3C88);
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-}
+  button {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    background: linear-gradient(90deg, $primary, $secondary);
+    color: white;
+    cursor: pointer;
 
-.buy-btn:hover {
-  opacity: 0.9;
+    &:hover {
+      opacity: 0.9;
+    }
+  }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="ultra-premium">
+  <section class="tier-page">
     <h2>Ultra Premium: Digital Product Request</h2>
     <form @submit.prevent="submitRequest">
       <label>
@@ -17,7 +17,7 @@
       <button type="submit">Submit Request</button>
     </form>
     <p v-if="submitted" class="submitted-msg">Our team will review your request.</p>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -34,34 +34,73 @@ function submitRequest() {
 }
 </script>
 
-<style scoped>
-.ultra-premium {
-  padding: 2rem;
-}
-form {
+<style lang="scss" scoped>
+@import "../assets/styles/variables.scss";
+
+.tier-page {
+  padding: $spacing-xl;
+  max-width: 600px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  max-width: 400px;
-}
-input, textarea {
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  border: 1px solid #ddd;
-}
-button {
-  background: #10B981;
-  color: white;
-  border: none;
-  padding: 0.7rem;
-  border-radius: 0.25rem;
-  cursor: pointer;
-}
-button:hover {
-  background: #1E3A8A;
-}
-.submitted-msg {
-  margin-top: 1rem;
-  color: #F5B301;
+  align-items: center;
+
+  h2 {
+    font-family: $font-heading;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: $spacing-lg;
+    background: linear-gradient(90deg, $primary, $secondary);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-align: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: $spacing-md;
+
+    label {
+      display: flex;
+      flex-direction: column;
+      font-weight: 500;
+      color: $text-main;
+
+      input, textarea {
+        margin-top: $spacing-xs;
+        padding: $spacing-sm;
+        border-radius: 0.25rem;
+        border: 1px solid $border-soft;
+        font-size: 1rem;
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+    }
+
+    button {
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      border: none;
+      font-weight: 600;
+      background: linear-gradient(90deg, $primary, $secondary);
+      color: white;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+
+  .submitted-msg {
+    margin-top: $spacing-md;
+    color: $accent;
+    font-weight: 500;
+  }
 }
 </style>

@@ -9,6 +9,7 @@
       tier="Premium"
       price="$19.99/mo"
       :features="['30-day monetization plan', 'Detailed analytics', 'Custom tips']"
+      highlight
     />
     <PricingCard
       tier="Ultra Premium"
@@ -18,17 +19,20 @@
   </section>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import PricingCard from './PricingCard.vue'
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "../../assets/styles/variables.scss";
+
+
 .pricing-section {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 2rem;
-  padding: 4rem 1rem;
+  gap: $spacing-lg;
+  padding: $spacing-xl 1rem;
   flex-wrap: wrap;
 }
 </style>

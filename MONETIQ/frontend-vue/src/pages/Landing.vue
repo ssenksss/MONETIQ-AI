@@ -1,77 +1,60 @@
 <template>
-  <div class="landing-page">
-    <div class="logo-container">
-      <img src="@/assets/logo-icon.svg" alt="Logo" class="logo-icon" />
-      <div class="logo-text">
-        <h1>MONETIQ</h1>
-        <span>AI</span>
-      </div>
+  <section class="landing">
+    <div class="hero">
+      <img src="@/assets/logo-icon.svg" class="hero-logo" />
+      <h1>MONETIQ <span>AI</span></h1>
+      <div class="coming-soon">COMING SOON</div>
     </div>
-
-    <div class="coming-soon">
-      COMING SOON
-    </div>
-
 
     <PricingSection />
-  </div>
+  </section>
 </template>
 
-<script lang="ts" setup>
-import PricingSection from '../components/pricing/PricingSection.vue'
+<script setup lang="ts">
+import PricingSection from '@/components/pricing/PricingSection.vue'
 </script>
 
-<style scoped>
-.landing-page {
+<style lang="scss" scoped>
+@import "../assets/styles/variables.scss";
+
+.landing {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
-  padding: 3rem 1rem;
-  background-color: #ffffff;
-  gap: 2rem;
-}
+  padding: $spacing-xl 1rem;
+  gap: $spacing-xl;
 
+  .hero {
+    text-align: center;
 
-.logo-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 4rem;
-}
+    .hero-logo {
+      width: 140px;
+      height: 140px;
+      margin-bottom: $spacing-md;
+    }
 
-.logo-icon {
-  width: 120px;
-  height: 120px;
-  margin-right: 1.5rem;
-}
+    h1 {
+      font-family: $font-heading;
+      font-size: 5rem;
+      font-weight: 700;
+      background: linear-gradient(to right, $primary, $secondary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
 
-.logo-text h1 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 5.5rem;
-  font-weight: 700;
-  background: linear-gradient(to right, #10B981, #1F3C88);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin: 0;
-}
+      span {
+        font-size: 2rem;
+        color: $accent;
+        vertical-align: super;
+      }
+    }
 
-.logo-text span {
-  font-size: 2rem;
-  color: #F5B301;
-  letter-spacing: 0.2em;
-  margin-left: 0.5rem;
-  vertical-align: super;
-}
-
-
-.coming-soon {
-  font-family: 'Inter', sans-serif;
-  font-weight: 200;
-  font-size: 3rem;
-  color: #B0B0B0;
-  letter-spacing: 0.2em;
-  text-align: center;
-  margin-bottom: 3rem;
+    .coming-soon {
+      margin-top: $spacing-md;
+      font-size: 3rem;
+      font-weight: 200;
+      color: $text-muted;
+      letter-spacing: 0.2em;
+    }
+  }
 }
 </style>

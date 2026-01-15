@@ -11,10 +11,12 @@ import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
 </script>
 
-<style>
+<style lang="scss">
+@import './assets/styles/variables.scss';
+
 #app {
-  font-family: 'Inter', sans-serif;
-  color: #1E3A8A;
+  font-family: $font-base;
+  color: $text-main;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

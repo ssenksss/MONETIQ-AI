@@ -1,10 +1,8 @@
 <template>
   <header class="header">
     <div class="logo">
-      <img src="../assets/logo-icon.svg" alt="MONETIQ logo" />
-      <h1>
-        MONETIQ <span class="ai">AI</span>
-      </h1>
+      <img src="../assets/logo-icon.svg" alt="Logo" />
+      <span class="brand">MONETIQ <em>AI</em></span>
     </div>
     <nav>
       <router-link to="/">Landing</router-link>
@@ -17,38 +15,58 @@
 
 <script setup lang="ts"></script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "../assets/styles/variables.scss";
+
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background: white;
-}
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-.logo h1 {
-  font-weight: 700;
-  background: linear-gradient(90deg, #10B981, #1E3A8A);
-  -webkit-background-clip: text;
-  color: transparent;
-}
-.logo .ai {
-  font-size: 0.6em;
-  color: #F5B301;
-  margin-left: 0.2rem;
-  letter-spacing: 1px;
-}
-nav a {
-  margin-left: 1rem;
-  text-decoration: none;
-  color: #1E3A8A;
-  font-weight: 500;
-}
-nav a:hover {
-  color: #10B981;
+  padding: $spacing-md $spacing-xl;
+  background: $bg-light;
+  border-bottom: 1px solid $border-soft;
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+
+    img {
+      width: 50px;
+      height: 50px;
+    }
+
+    .brand {
+      font-family: $font-heading;
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: linear-gradient(90deg, $primary, $secondary);
+      -webkit-background-clip: text;
+      color: transparent;
+
+      em {
+        font-style: normal;
+        font-size: 0.7em;
+        color: $accent;
+        margin-left: $spacing-xs;
+      }
+    }
+  }
+
+  nav a {
+    margin-left: $spacing-lg;
+    text-decoration: none;
+    color: $text-main;
+    font-weight: 500;
+
+    &.router-link-active {
+      color: $primary;
+    }
+
+    &:hover {
+      color: $accent;
+    }
+  }
 }
 </style>
