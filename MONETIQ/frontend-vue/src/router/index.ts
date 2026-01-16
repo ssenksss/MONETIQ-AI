@@ -1,23 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router'
-// @ts-ignore
-import Landing from '../pages/Landing.vue'
-// @ts-ignore
-import FreeTier from '../pages/FreeTier.vue'
-// @ts-ignore
-import PremiumTier from '../pages/PremiumTier.vue'
-// @ts-ignore
-import UltraPremium from '../pages/UltraPremium.vue'
+import Landing from '@/pages/Landing.vue'
+import FreePage from '@/pages/FreePage.vue'
+import PremiumPage from '@/pages/PremiumPage.vue'
+import UltraPage from '@/pages/UltraPage.vue'
 
 const routes = [
-  { path: '/', name: 'Landing', component: Landing },
-  { path: '/free', name: 'FreeTier', component: FreeTier },
-  { path: '/premium', name: 'PremiumTier', component: PremiumTier },
-  { path: '/ultra', name: 'UltraPremium', component: UltraPremium },
+    { path: '/', name: 'Landing', component: Landing },
+    { path: '/free', name: 'Free', component: FreePage },
+    { path: '/premium', name: 'Premium', component: PremiumPage },
+    { path: '/ultra', name: 'Ultra', component: UltraPage },
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+    history: createWebHistory(),
+    routes,
 })
 
 export default router
