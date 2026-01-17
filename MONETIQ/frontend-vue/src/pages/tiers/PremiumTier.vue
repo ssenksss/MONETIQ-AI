@@ -39,7 +39,7 @@ const premiumPlan = store.premiumPlan
   }
 
   .plan-list li {
-    font-family: $font-heading;  // lagan heading font
+    font-family: $font-heading;
     font-weight: 200;
     color: $text-muted;
     font-size: 1.1rem;

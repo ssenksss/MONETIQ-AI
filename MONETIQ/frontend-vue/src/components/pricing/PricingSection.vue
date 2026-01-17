@@ -1,4 +1,6 @@
 <template>
+  <router-link to="/pricing"></router-link>
+
   <section class="pricing-section">
     <PricingHeader />
 

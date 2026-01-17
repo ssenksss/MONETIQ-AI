@@ -1,28 +1,24 @@
-
 <template>
   <header class="header">
     <div class="header-inner">
-
       <div class="logo" @click="goHome">
         <img src="@/assets/logo-icon.svg" alt="MONETIQ AI" />
         <span>MONETIQ <em>AI</em></span>
       </div>
 
-
       <nav class="nav" v-if="!isMobile">
         <ul>
           <li><button @click="goProduct">Product</button></li>
+          <li><button @click="goHowItWorks">How It Works</button></li>
           <li><button @click="goPricing">Pricing</button></li>
           <li><button @click="goResources">Resources</button></li>
         </ul>
-
 
         <div class="cta-buttons">
           <button class="sign-in" @click="goSignIn">Sign In</button>
           <PrimaryButton @click="goGetStarted">Get Started</PrimaryButton>
         </div>
       </nav>
-
 
       <div class="hamburger" v-if="isMobile" @click="toggleMobileMenu">
         <span></span>
@@ -31,11 +27,11 @@
       </div>
     </div>
 
-
     <transition name="slide-fade">
       <div class="mobile-menu" v-if="mobileMenuOpen">
         <ul>
           <li><button @click="goProduct">Product</button></li>
+          <li><button @click="goHowItWorks">How It Works</button></li>
           <li><button @click="goPricing">Pricing</button></li>
           <li><button @click="goResources">Resources</button></li>
           <li><button class="sign-in" @click="goSignIn">Sign In</button></li>
@@ -64,7 +60,8 @@ onMounted(() => {
 
 
 const goHome = () => router.push('/')
-const goProduct = () => router.push('/')
+const goProduct = () => router.push('/product')
+const goHowItWorks = () => router.push('/how-it-works')
 const goPricing = () => router.push('/pricing')
 const goResources = () => router.push('/resources')
 const goSignIn = () => router.push('/login')

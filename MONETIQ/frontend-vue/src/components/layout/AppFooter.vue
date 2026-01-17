@@ -1,8 +1,7 @@
-
 <template>
   <footer class="footer">
     <div class="footer-inner">
-      <!-- Logo + pitch -->
+
       <div class="footer-logo">
         <img src="@/assets/logo-icon.svg" alt="MONETIQ AI" />
         <span>MONETIQ <em>AI</em></span>
@@ -11,34 +10,37 @@
 
 
       <div class="footer-links">
-        <div>
+        <div class="footer-section">
           <h4>Product</h4>
           <ul>
-            <li><a href="#">How it works</a></li>
-            <li><a href="#">Pricing</a></li>
-            <li><a href="#">Free Plan</a></li>
-            <li><a href="#">Premium</a></li>
+            <li><router-link to="/product">Product</router-link></li>
+            <li><router-link to="/how-it-works">How it works</router-link></li>
+            <li><router-link to="/pricing">Pricing</router-link></li>
+            <li><router-link to="/free-plan">Free Plan</router-link></li>
+            <li><router-link to="/premium">Premium</router-link></li>
+            <li><router-link to="/ultra">Ultra</router-link></li>
           </ul>
         </div>
 
-        <div>
+        <div class="footer-section">
           <h4>Company</h4>
           <ul>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Careers</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><router-link to="/about">About</router-link></li>
+            <li><router-link to="/careers">Careers</router-link></li>
+            <li><router-link to="/contact">Contact</router-link></li>
           </ul>
         </div>
 
-        <div>
+        <div class="footer-section">
           <h4>Legal</h4>
           <ul>
-            <li><a href="#">Privacy</a></li>
-            <li><a href="#">Terms</a></li>
-            <li><a href="#">Security</a></li>
+            <li><router-link to="/privacy">Privacy</router-link></li>
+            <li><router-link to="/terms">Terms</router-link></li>
+            <li><router-link to="/security">Security</router-link></li>
           </ul>
         </div>
       </div>
+
 
       <div class="footer-bottom">
         <div class="social">
@@ -53,7 +55,8 @@
   </footer>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
 
 <style lang="scss" scoped>
 @import '@/assets/styles/variables';
@@ -89,21 +92,19 @@
     gap: $space-lg;
     margin-bottom: $space-lg;
 
-    h4 { font-size: 1.2rem; margin-bottom: $space-sm; color: $secondary; }
+    .footer-section {
+      h4 { font-size: 1.2rem; margin-bottom: $space-sm; color: $secondary; }
+      ul { list-style: none; padding: 0; margin: 0; }
+      li { margin-bottom: $space-xs; }
+      li a {
+        font-weight: 200;
+        font-size: 0.75rem;
+        text-decoration: none;
+        color: $text-muted;
+        transition: $transition;
 
-    ul { list-style: none; padding: 0; margin: 0; }
-
-    li a {
-      font-weight: 200;
-      font-size: 0.75rem;
-      text-decoration: none;
-      color: $text-muted;
-      display: block;
-      margin-bottom: $space-xs;
-      letter-spacing: 0.1em;
-      transition: $transition;
-
-      &:hover { color: $primary; transform: scale(1.05); }
+        &:hover { color: $primary; transform: scale(1.05); }
+      }
     }
   }
 

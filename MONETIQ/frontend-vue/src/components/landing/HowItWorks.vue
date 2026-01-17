@@ -1,4 +1,6 @@
 <template>
+  <router-link to="/how-it-works"></router-link>
+
   <section class="how-it-works">
     <h2>How It Works</h2>
     <div class="steps">

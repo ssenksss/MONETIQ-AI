@@ -1,5 +1,7 @@
 <template>
-  <section class="feature-grid">
+   <router-link to="/free"></router-link>
+
+    <section class="feature-grid">
     <h2>Free Tier Insights</h2>
     <div class="grid">
       <InsightCard title="Engagement" description="Track likes, comments, and shares." icon="📊" />

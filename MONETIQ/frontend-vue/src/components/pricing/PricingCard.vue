@@ -80,7 +80,7 @@ defineProps<{
 
   &.highlight {
     border: 2px solid $primary;
-    transform: translateY(-5px); // uvek malo iznad ostalih
+    transform: translateY(-5px);
   }
 }
 

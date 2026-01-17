@@ -1,4 +1,6 @@
 <template>
+  <router-link to="/free"></router-link>
+
   <SectionWrapper>
     <GlassCard class="free-tier-card">
       <Badge>Free Tier</Badge>
@@ -8,7 +10,13 @@
         A quick overview of your Instagram performance.
       </p>
 
-
+      <div v-if="profile" class="profile-data">
+        <p><strong>Username:</strong> {{ profile.username }}</p>
+        <p><strong>Analysis Date:</strong> {{ profile.analysisDate }}</p>
+        <ul>
+          <li v-for="(s, i) in profile.suggestions" :key="i">{{ s.text }}</li>
+        </ul>
+      </div>
 
       <div v-else class="no-profile">
         No profile data available yet.
@@ -22,19 +30,21 @@
   </SectionWrapper>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import SectionWrapper from '@/components/layout/SectionWrapper.vue'
 import GlassCard from '@/components/ui/GlassCard.vue'
 import Badge from '@/components/ui/Badge.vue'
+import { computed } from 'vue'
+import { useProfileStore, Profile } from '@/stores/profileStore'
 import { useRouter } from 'vue-router'
 
+const profileStore = useProfileStore()
+
+const profile = computed<Profile | null>(() => profileStore.profile)
+
 const router = useRouter()
-
-const goPremium = () => {
-  router.push('/premium')
-}
+const goPremium = () => router.push('/premium')
 </script>
-
 
 <style lang="scss" scoped>
 @import '@/assets/styles/variables';
@@ -46,7 +56,7 @@ const goPremium = () => {
   text-align: center;
 
   h2 {
-    font-family: $font-heading;   // heading font
+    font-family: $font-heading;
     font-weight: 700;
     font-size: 2.2rem;
     margin: $space-sm 0;
@@ -54,7 +64,7 @@ const goPremium = () => {
   }
 
   .subtitle {
-    font-family: $font-heading;   // lagan heading font
+    font-family: $font-heading;
     font-weight: 200;
     font-size: 1.1rem;
     color: $text-muted;
@@ -92,6 +102,4 @@ const goPremium = () => {
     }
   }
 }
-
-
 </style>

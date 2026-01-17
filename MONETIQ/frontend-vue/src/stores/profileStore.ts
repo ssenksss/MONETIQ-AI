@@ -6,14 +6,13 @@ interface Suggestion {
     day?: number
 }
 
-interface Profile {
+export interface Profile {
     username: string
     analysisDate: string
     suggestions: Suggestion[]
 }
 
 export const useProfileStore = defineStore('profile', () => {
-
     const profile = ref<Profile>({
         username: 'TeodoraGaric',
         analysisDate: '2026-01-16',
@@ -24,12 +23,10 @@ export const useProfileStore = defineStore('profile', () => {
         ],
     })
 
-
     const premiumPlan = ref<Suggestion[]>(Array.from({ length: 30 }, (_, i) => ({
         day: i + 1,
         text: `Actionable tip for day ${i + 1}`,
     })))
-
 
     const ultraPlan = ref<Suggestion[]>([
         { text: 'Exclusive insights' },
@@ -37,9 +34,5 @@ export const useProfileStore = defineStore('profile', () => {
         { text: 'Priority support' },
     ])
 
-    return {
-        profile,
-        premiumPlan,
-        ultraPlan,
-    }
+    return { profile, premiumPlan, ultraPlan }
 })
