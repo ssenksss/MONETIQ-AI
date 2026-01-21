@@ -2,7 +2,11 @@
   <section class="analysis-result" v-if="result">
     <h2>Monetization Plan for @{{ result.username }}</h2>
 
-    <pre>{{ result.plan }}</pre>
+    <ul>
+      <li v-for="(suggestion, index) in result.suggestions" :key="index">
+        {{ suggestion }}
+      </li>
+    </ul>
 
     <span class="timestamp">
       Generated: {{ formattedDate }}
@@ -18,11 +22,10 @@ import type { AnalysisResult } from '@/stores/analysisStore'
 const analysisStore = useAnalysisStore()
 const result = computed<AnalysisResult | null>(() => analysisStore.result)
 
-
 const formattedDate = computed(() => {
   const r = result.value
-  if (!r || !r.createdAt) return ''
-  return new Date(r.createdAt).toLocaleString()
+  if (!r || !r.analysisDate) return ''
+  return new Date(r.analysisDate).toLocaleString()
 })
 </script>
 
@@ -52,16 +55,18 @@ const formattedDate = computed(() => {
     @include gradient-text($primary, $secondary);
   }
 
-  pre {
-    width: 100%;
-    white-space: pre-wrap;
-    padding: $space-md;
-    border-radius: $radius-md;
-    background: rgba(255,255,255,0.05);
-    font-family: $font-mono;
-    color: $text-main;
-    box-shadow: $shadow-soft;
-    overflow-x: auto;
+
+  ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+
+    li {
+      margin-bottom: $space-xs;
+      color: $text-main;
+      font-family: $font-mono;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
   }
 
 
@@ -79,8 +84,15 @@ const formattedDate = computed(() => {
       font-size: 1.5rem;
     }
 
-    pre {
-      font-size: 0.85rem;
+    li {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+      font-size: 0.9rem;
+
+      span {
+        font-size: 0.8rem;
+      }
     }
   }
 }

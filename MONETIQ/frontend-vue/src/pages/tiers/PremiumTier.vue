@@ -3,7 +3,7 @@
     <section class="tier-page">
       <h2>Premium 30-Day Monetization Plan</h2>
       <ul class="plan-list">
-        <li v-for="(task, idx) in premiumPlan" :key="idx">
+        <li v-for="task in premiumPlan" :key="task.day">
           Day {{ task.day }}: {{ task.text }}
         </li>
       </ul>
@@ -12,12 +12,19 @@
 </template>
 
 <script setup lang="ts">
+import { computed, onMounted } from 'vue'
+import { useUserStore, PremiumTask } from '@/stores/userStore'
 import SectionWrapper from '@/components/layout/SectionWrapper.vue'
-import { useProfileStore } from '@/stores/profileStore.ts'
 
-const store = useProfileStore()
-const premiumPlan = store.premiumPlan
+const userStore = useUserStore()
+
+const premiumPlan = computed<PremiumTask[]>(() => userStore.plan?.items || [])
+
+onMounted(() => {
+  userStore.fetchPremiumPlan()
+})
 </script>
+
 
 <style lang="scss" scoped>
 @import '@/assets/styles/variables';

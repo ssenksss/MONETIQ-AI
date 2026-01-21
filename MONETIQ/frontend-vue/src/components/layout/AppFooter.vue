@@ -3,7 +3,7 @@
     <div class="footer-inner">
 
       <div class="footer-logo">
-        <img src="@/assets/logo-icon.svg" alt="MONETIQ AI" />
+        <img src="@/assets/logo-icon.png" alt="MONETIQ AI" />
         <span>MONETIQ <em>AI</em></span>
         <p>AI-powered Instagram growth intelligence for serious creators and brands.</p>
       </div>

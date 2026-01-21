@@ -1,4 +1,5 @@
 <template>
+  <FreeTier />
   <SectionWrapper>
     <h1>Free Tier Insights</h1>
     <div class="insights-grid">
@@ -13,9 +14,12 @@
   </SectionWrapper>
 </template>
 
+
 <script setup lang="ts">
 import SectionWrapper from '@/components/layout/SectionWrapper.vue'
 import InsightCard from '@/components/landing/InsightCard.vue'
+import FreeTier from '@/pages/tiers/FreeTier.vue'
+
 
 const insights = [
   { title: 'Engagement', description: 'Likes, comments, shares analysis.', icon: '📊' },

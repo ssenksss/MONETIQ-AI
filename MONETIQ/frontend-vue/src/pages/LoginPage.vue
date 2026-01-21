@@ -36,14 +36,41 @@
     </p>
   </section>
 </template>
-
-<script lang="ts" setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+import { useUserStore } from '@/stores/userStore'
 import PrimaryButton from '@/components/ui/PrimaryButton.vue'
+import { useAnalysisStore } from '@/stores/analysisStore'
+
+
+const analysisStore = useAnalysisStore()
+
+const handleSubmit = async () => {
+  errorMessage.value = ''
+  loading.value = true
+  try {
+    await authStore.login({ email: email.value, password: password.value })
+
+    analysisStore.reset()
+
+    await userStore.fetchMe()
+
+    if (userStore.role === 'PREMIUM_USER') await router.push('/premium')
+    else if (userStore.role === 'ULTRA_USER') await router.push('/ultra')
+    else await router.push('/free')
+
+  } catch (err: any) {
+    errorMessage.value = err.message || 'Login failed'
+  } finally {
+    loading.value = false
+  }
+}
+
 
 const authStore = useAuthStore()
+const userStore = useUserStore()
 const router = useRouter()
 
 const email = ref('')
@@ -52,23 +79,9 @@ const rememberMe = ref(false)
 const loading = ref(false)
 const errorMessage = ref('')
 
-const handleSubmit = async () => {
-  errorMessage.value = ''
-  loading.value = true
-  try {
-    await authStore.login({
-      email: email.value,
-      password: password.value,
-      rememberMe: rememberMe.value
-    })
-    router.push('/analyze')
-  } catch (err: any) {
-    errorMessage.value = err.message || 'Login failed'
-  } finally {
-    loading.value = false
-  }
-}
+
 </script>
+
 
 <style scoped lang="scss">
 @import '@/assets/styles/variables';

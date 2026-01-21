@@ -17,7 +17,9 @@
         </label>
         <PrimaryButton type="submit">Submit Request</PrimaryButton>
       </form>
-      <p v-if="submitted" class="submitted-msg">Our team will review your request.</p>
+      <p v-if="submitted" class="submitted-msg">
+        Our team will review your request.
+      </p>
     </section>
   </SectionWrapper>
 </template>
@@ -34,7 +36,6 @@ const submitted = ref(false)
 
 function submitRequest() {
   submitted.value = true
-
 }
 </script>
 
@@ -62,17 +63,24 @@ function submitRequest() {
   }
 
   form label {
+    display: flex;
+    flex-direction: column;
     font-family: $font-heading;
     font-weight: 200;
     color: $text-muted;
     font-size: 1rem;
     line-height: 1.5;
+    width: 100%;
+    margin-bottom: $space-md;
 
     input, textarea {
+      margin-top: $space-xs;
+      padding: $space-sm;
+      border-radius: 0.5rem;
+      border: 1px solid rgba($text-main, 0.3);
       font-family: $font-heading;
       font-weight: 200;
       font-size: 1rem;
-      line-height: 1.5;
     }
   }
 
@@ -90,5 +98,4 @@ function submitRequest() {
     @include hover-glow;
   }
 }
-
 </style>

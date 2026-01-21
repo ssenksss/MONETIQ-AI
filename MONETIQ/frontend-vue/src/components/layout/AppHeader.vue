@@ -2,7 +2,7 @@
   <header class="header">
     <div class="header-inner">
       <div class="logo" @click="goHome">
-        <img src="@/assets/logo-icon.svg" alt="MONETIQ AI" />
+        <img src="@/assets/logo-icon.png" alt="MONETIQ AI" />
         <span>MONETIQ <em>AI</em></span>
       </div>
 
@@ -77,7 +77,7 @@ const goGetStarted = () => router.push('/signup')
   position: sticky;
   top: 0;
   z-index: 100;
-  padding: $space-sm $space-xl;
+  padding: $space-md $space-xl;
   backdrop-filter: blur(25px);
   box-shadow: $shadow-glass;
   display: flex;
@@ -93,7 +93,7 @@ const goGetStarted = () => router.push('/signup')
     .logo {
       display: flex;
       align-items: center;
-      gap: $space-sm;
+      gap: 0.5rem;
       cursor: pointer;
 
       img { width: 44px; animation: float 4s ease-in-out infinite; }
@@ -104,11 +104,13 @@ const goGetStarted = () => router.push('/signup')
         font-weight: 700;
         @include gradient-text($primary, $secondary);
 
+
         em {
           font-style: normal;
           font-size: 0.6em;
           color: $accent;
           margin-left: 0.2rem;
+
         }
       }
     }
@@ -130,9 +132,10 @@ const goGetStarted = () => router.push('/signup')
           background: transparent;
           border: none;
           font-family: $font-heading;
-          font-weight: 200;          // lagani font
+
+          font-weight: 200;
           font-size: 1rem;
-          letter-spacing: 0.15em;    // isti kao hero subtitle
+          letter-spacing: 0.15em;
           color: $text-muted;
           cursor: pointer;
           position: relative;
@@ -165,12 +168,12 @@ const goGetStarted = () => router.push('/signup')
         .sign-in {
           background: transparent;
           border: 1px solid $text-muted;
-          border-radius: $radius-sm;
+          border-radius: $radius-sm ;
           padding: 0.3rem 0.8rem;
           font-family: $font-heading;
           font-weight: 600;
           font-size: 0.95rem;
-          color: $text-main;
+          color: $text-muted;
           transition: $transition;
 
           &:hover {
@@ -209,20 +212,77 @@ const goGetStarted = () => router.push('/signup')
     flex-direction: column;
     gap: $space-md;
 
-    ul li button {
-      font-family: $font-heading;
-      font-weight: 600;
-      font-size: 1.1rem;
-      color: $text-main;
-      text-align: left;
-      width: 100%;
-      padding: $space-sm 0;
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: $space-md;
+      list-style: none;
+      margin: 0;
+      padding: 0;
 
-      &.get-started { @include gradient-text($primary, $secondary); font-weight: 700; }
-      &.sign-in { border-bottom: 1px solid $text-muted; margin-bottom: $space-sm; }
-      &:hover { color: $primary; }
+      li button {
+        background: transparent;
+        border: none;
+        font-family: $font-heading;
+        font-weight: 200;
+        font-size: 1rem;
+        letter-spacing: 0.15em;
+        color: $text-muted;
+        cursor: pointer;
+        position: relative;
+        padding: $space-xs $space-sm;
+        transition: $transition;
+
+        &:after {
+          content: '';
+          position: absolute;
+          bottom: -3px;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background: $primary;
+          border-radius: $radius-sm;
+          transition: width 0.3s ease;
+        }
+
+        &:hover::after { width: 100%; }
+        &:hover { color: $primary; transform: scale(1.05); }
+      }
+    }
+
+    .cta-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: $space-sm;
+      align-items: flex-start;
+
+      .sign-in {
+        background: transparent;
+        border: 1px solid $text-muted;
+        border-radius: $radius-sm;
+        padding: 0.3rem 0.8rem;
+        font-family: $font-heading;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: $text-main;
+        transition: $transition;
+
+        &:hover {
+          border-color: $primary;
+          color: $primary;
+          transform: scale(1.05);
+        }
+      }
+
+      PrimaryButton {
+        font-family: $font-heading;
+        font-weight: 600;
+        font-size: 0.95rem;
+        padding: 0.5rem 1.2rem;
+      }
     }
   }
+
 
 
   .slide-fade-enter-active, .slide-fade-leave-active { transition: all 0.3s ease; }

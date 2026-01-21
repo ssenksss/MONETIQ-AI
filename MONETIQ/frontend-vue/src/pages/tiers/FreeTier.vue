@@ -1,25 +1,28 @@
 <template>
-  <router-link to="/free"></router-link>
-
   <SectionWrapper>
     <GlassCard class="free-tier-card">
       <Badge>Free Tier</Badge>
 
       <h2>Profile Snapshot</h2>
-      <p class="subtitle">
-        A quick overview of your Instagram performance.
-      </p>
+      <p class="subtitle">A quick overview of your Instagram performance.</p>
 
-      <div v-if="profile" class="profile-data">
-        <p><strong>Username:</strong> {{ profile.username }}</p>
-        <p><strong>Analysis Date:</strong> {{ profile.analysisDate }}</p>
-        <ul>
-          <li v-for="(s, i) in profile.suggestions" :key="i">{{ s.text }}</li>
-        </ul>
+      <div v-if="!hasProfile">
+        <AnalysisInput @analysis-complete="onAnalysisComplete" />
       </div>
 
-      <div v-else class="no-profile">
-        No profile data available yet.
+      <div v-else class="profile-data">
+        <p><strong>Username:</strong> {{ userStore.username }}</p>
+
+        <ul>
+          <li v-for="s in userStore.profile?.suggestions" :key="s.text">
+            {{ s.text }}
+          </li>
+        </ul>
+
+
+        <p class="analysis-date">
+          Analysis Date: {{ formattedDate }}
+        </p>
       </div>
 
       <div class="upgrade-hint">
@@ -30,21 +33,35 @@
   </SectionWrapper>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/userStore'
+
 import SectionWrapper from '@/components/layout/SectionWrapper.vue'
 import GlassCard from '@/components/ui/GlassCard.vue'
 import Badge from '@/components/ui/Badge.vue'
-import { computed } from 'vue'
-import { useProfileStore, Profile } from '@/stores/profileStore'
-import { useRouter } from 'vue-router'
+import AnalysisInput from '@/components/analysis/AnalysisInput.vue'
 
-const profileStore = useProfileStore()
-
-const profile = computed<Profile | null>(() => profileStore.profile)
-
+const userStore = useUserStore()
 const router = useRouter()
+
+const hasProfile = computed(() => userStore.profile !== null)
+
+const formattedDate = computed(() => {
+  if (!userStore.profile?.analysisDate) return ''
+  return new Date(userStore.profile.analysisDate).toLocaleString()
+})
+const onAnalysisComplete = (payload: {
+  analysisDate: string
+  suggestions: { text: string }[]
+}) => {
+  userStore.setProfile(payload)
+}
+
 const goPremium = () => router.push('/premium')
 </script>
+
 
 <style lang="scss" scoped>
 @import '@/assets/styles/variables';
@@ -52,8 +69,9 @@ const goPremium = () => router.push('/premium')
 
 .free-tier-card {
   max-width: 720px;
-  margin: 0 auto;
+  margin: 2rem auto;
   text-align: center;
+  padding: $space-lg;
 
   h2 {
     font-family: $font-heading;
@@ -69,16 +87,51 @@ const goPremium = () => router.push('/premium')
     font-size: 1.1rem;
     color: $text-muted;
     line-height: 1.5;
-    margin-bottom: $space-lg;
+    margin-bottom: $space-md;
+    padding-bottom: 1rem;
   }
 
-  .no-profile {
+  .profile-data {
     font-family: $font-heading;
-    font-weight: 200;
-    color: $text-muted;
-    font-size: 1.1rem;
-    margin: $space-lg 0;
-    line-height: 1.5;
+    margin-top: $space-md;
+
+    p {
+      margin: $space-xs 0;
+      font-size: 1rem;
+      color: $text-main;
+      @include gradient-text($primary, $secondary);
+
+      &.analysis-date {
+        font-size: 0.9rem;
+        color: $text-muted;
+        margin-top: $space-sm;
+        text-align: right;
+      }
+    }
+
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+      margin: $space-sm 0;
+      display: flex;
+      flex-direction: column;
+      gap: $space-xs;
+
+      li {
+        position: relative;
+        padding-left: 1.2rem;
+        font-family: $font-mono;
+        font-size: 0.95rem;
+        color: $text-muted;
+
+        &::before {
+          content: '•';
+          position: absolute;
+          left: 0;
+          color: $primary;
+        }
+      }
+    }
   }
 
   .upgrade-hint {
@@ -87,7 +140,6 @@ const goPremium = () => router.push('/premium')
     font-size: 0.95rem;
     color: $text-muted;
     margin-top: $space-lg;
-    line-height: 1.5;
 
     span {
       margin-left: 0.25rem;

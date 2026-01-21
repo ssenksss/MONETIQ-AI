@@ -2,9 +2,9 @@
   <section class="analysis-history" v-if="history.length">
     <h2>Previous Analyses</h2>
     <ul>
-      <li v-for="item in history" :key="item.createdAt">
+      <li v-for="item in history" :key="item.analysisDate">
         <strong>@{{ item.username }}</strong>
-        <span>{{ formatDate(item.createdAt) }}</span>
+        <span>{{ formatDate(item.analysisDate) }}</span>
       </li>
     </ul>
   </section>
@@ -20,6 +20,7 @@ const history = computed(() => analysisStore.history)
 const formatDate = (dateStr: string) => new Date(dateStr).toLocaleString()
 </script>
 
+
 <style scoped lang="scss">
 @import '@/assets/styles/variables';
 @import '@/assets/styles/mixins';
@@ -30,7 +31,7 @@ const formatDate = (dateStr: string) => new Date(dateStr).toLocaleString()
   width: 100%;
   max-width: 650px;
   margin: $space-lg auto;
-  @include glass;                // glass effect
+  @include glass;
   padding: $space-md;
   border-radius: $radius-lg;
   box-shadow: $shadow-soft;
