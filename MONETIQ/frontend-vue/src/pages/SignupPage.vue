@@ -50,13 +50,22 @@
   </section>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+import { useUserStore } from '@/stores/userStore'
 import PrimaryButton from '@/components/ui/PrimaryButton.vue'
 
+interface SignupPayload {
+  name: string
+  email: string
+  password: string
+  marketingOptIn: boolean
+}
+
 const authStore = useAuthStore()
+const userStore = useUserStore()
 const router = useRouter()
 
 const name = ref('')
@@ -70,10 +79,12 @@ const errorMessage = ref('')
 
 const handleSubmit = async () => {
   errorMessage.value = ''
+
   if (password.value !== confirmPassword.value) {
     errorMessage.value = 'Passwords do not match'
     return
   }
+
   if (!acceptedTerms.value) {
     errorMessage.value = 'You must accept the terms and privacy policy'
     return
@@ -81,13 +92,18 @@ const handleSubmit = async () => {
 
   loading.value = true
   try {
-    await authStore.signup({
+    // Signup
+    const payload: SignupPayload = {
       name: name.value,
       email: email.value,
       password: password.value,
       marketingOptIn: marketingOptIn.value
-    })
-    router.push('/analyze')
+    }
+    await authStore.signup(payload)
+
+    await userStore.fetchMe()
+
+    await router.push('/analyze')
   } catch (err: any) {
     errorMessage.value = err.message || 'Signup failed'
   } finally {

@@ -1,53 +1,49 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import axios from 'axios'
 
 export interface AnalysisResult {
     username: string
-    plan: string
-    createdAt: string
+    analysisDate: string
+    suggestions: string[]
 }
 
 export const useAnalysisStore = defineStore('analysis', () => {
-    const currentUsername = ref('')
     const loading = ref(false)
     const result = ref<AnalysisResult | null>(null)
     const history = ref<AnalysisResult[]>([])
+    const lastUser = ref<string | null>(null)
 
     const startAnalysis = async (username: string) => {
         loading.value = true
-        currentUsername.value = username
         result.value = null
+        lastUser.value = username
 
-        await new Promise(resolve => setTimeout(resolve, 1500))
+        try {
+            const response = await axios.get(
+                `http://localhost:8080/api/profile/analyze?username=${username}`
+            )
 
-        const generatedPlan = `
-AI Monetization Plan for @${username}:
+            const analysis: AnalysisResult = {
+                username: response.data.username,
+                analysisDate: response.data.analysisDate,
+                suggestions: response.data.suggestions
+            }
 
-1. Focus on niche-specific content 3x/week.
-2. Engage with followers daily.
-3. Launch Free & Premium plan content.
-4. Collaborate with micro-influencers in your niche.
-5. Track metrics weekly and optimize.
-
-Expected Outcome: Increase engagement by 30% in 3 months.
-    `
-
-        const analysis: AnalysisResult = {
-            username,
-            plan: generatedPlan,
-            createdAt: new Date().toISOString()
+            result.value = { ...analysis }
+            history.value.unshift({ ...analysis })
+        } catch (err: any) {
+            console.error(err)
+        } finally {
+            loading.value = false
         }
+    }
 
-        result.value = analysis
-        history.value.unshift(analysis)
+    const reset = () => {
+        result.value = null
         loading.value = false
+        lastUser.value = null
     }
 
-    return {
-        currentUsername,
-        loading,
-        result,
-        history,
-        startAnalysis
-    }
+    return { loading, result, history, startAnalysis, reset, lastUser }
 })

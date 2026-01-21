@@ -68,6 +68,7 @@ defineProps<{
     cursor: pointer;
     transition: $transition;
 
+
     &:hover {
       opacity: 0.9;
       transform: scale(1.03);

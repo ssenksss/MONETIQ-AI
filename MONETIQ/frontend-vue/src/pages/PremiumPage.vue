@@ -1,4 +1,5 @@
 <template>
+  <PremiumTier />
   <SectionWrapper>
     <h1>Premium 30-Day Strategy</h1>
     <div class="timeline">
@@ -15,6 +16,7 @@
 <script setup lang="ts">
 import SectionWrapper from '@/components/layout/SectionWrapper.vue'
 import GlassCard from '@/components/ui/GlassCard.vue'
+import PremiumTier from "@/pages/tiers/PremiumTier.vue";
 </script>
 
 <style lang="scss" scoped>

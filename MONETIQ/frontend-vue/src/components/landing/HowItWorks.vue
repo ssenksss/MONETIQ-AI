@@ -69,7 +69,7 @@ const steps = [
         font-weight: 700;
         font-size: 1.5rem;
         margin-bottom: $space-xs;
-        color: $primary; // zelena, primary
+        color: $primary;
         animation: fadeIn 1s 0.2s ease forwards;
       }
 

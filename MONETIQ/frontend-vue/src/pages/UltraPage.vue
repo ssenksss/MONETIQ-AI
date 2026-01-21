@@ -1,33 +1,19 @@
 <template>
+  <UltraTier />
   <SectionWrapper>
     <div class="ultra-hero">
       <h1>Ultra Premium</h1>
       <p>Apply for the elite strategy plan for top creators.</p>
-      <PrimaryButton>Apply Now</PrimaryButton>
+      <PrimaryButton @click="goRequest">Apply Now</PrimaryButton>
     </div>
 
     <div class="features">
-      <GlassCard>
+      <GlassCard v-for="feature in features" :key="feature.title">
         <div class="feature-content">
-          <h3>Exclusive Insights</h3>
-          <p>Get access to insights not available to other tiers.</p>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
         </div>
       </GlassCard>
-
-      <GlassCard>
-        <div class="feature-content">
-          <h3>1-on-1 Strategy</h3>
-          <p>Work directly with our growth AI specialists.</p>
-        </div>
-      </GlassCard>
-
-      <GlassCard>
-        <div class="feature-content">
-          <h3>Priority Support</h3>
-          <p>Immediate help from our team whenever needed.</p>
-        </div>
-      </GlassCard>
-
     </div>
   </SectionWrapper>
 </template>
@@ -36,6 +22,20 @@
 import SectionWrapper from '@/components/layout/SectionWrapper.vue'
 import GlassCard from '@/components/ui/GlassCard.vue'
 import PrimaryButton from '@/components/ui/PrimaryButton.vue'
+import { useRouter } from 'vue-router'
+import UltraTier from "@/pages/tiers/UltraTier.vue";
+
+const router = useRouter()
+
+const features = [
+  { title: 'Exclusive Insights', description: 'Get access to insights not available to other tiers.' },
+  { title: '1-on-1 Strategy', description: 'Work directly with our growth AI specialists.' },
+  { title: 'Priority Support', description: 'Immediate help from our team whenever needed.' }
+]
+
+const goRequest = () => {
+  router.push('/ultra-request')
+}
 </script>
 
 <style lang="scss" scoped>
@@ -45,23 +45,17 @@ import PrimaryButton from '@/components/ui/PrimaryButton.vue'
 .ultra-hero {
   text-align: center;
   margin-bottom: $space-xl;
+
   h1 {
     font-family: $font-heading;
     font-weight: 700;
     font-size: 2.5rem;
     text-align: center;
     margin-bottom: $space-lg;
-
-    background: linear-gradient(
-            70deg,
-            $primary 0%,
-            $primary 40%,
-            $secondary 70%
-    );
+    background: linear-gradient(70deg, $primary 0%, $primary 40%, $secondary 70%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-
 
   p {
     font-family: $font-heading;
@@ -76,6 +70,7 @@ import PrimaryButton from '@/components/ui/PrimaryButton.vue'
     @include hover-glow;
   }
 }
+
 .features {
   display: flex;
   flex-wrap: wrap;
@@ -102,8 +97,4 @@ import PrimaryButton from '@/components/ui/PrimaryButton.vue'
     }
   }
 }
-
-
-
-
 </style>

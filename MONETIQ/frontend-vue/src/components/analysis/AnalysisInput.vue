@@ -23,14 +23,35 @@ import { useAnalysisStore } from '@/stores/analysisStore'
 const username = ref('')
 const analysisStore = useAnalysisStore()
 
+const emit = defineEmits<{
+  (e: 'analysis-complete', payload: {
+    analysisDate: string
+    suggestions: { text: string }[]
+  }): void
+}>()
+
+
 const disabled = computed(() => analysisStore.loading)
 
-const submit = () => {
+const submit = async () => {
   if (!username.value) return
-  analysisStore.startAnalysis(username.value)
+
+  await analysisStore.startAnalysis(username.value)
+
+  if (analysisStore.result) {
+    emit('analysis-complete', {
+      analysisDate: analysisStore.result.analysisDate,
+      suggestions: analysisStore.result.suggestions.map((s: { text: string }) => ({ text: s.text }))
+
+    })
+
+
+  }
+
   username.value = ''
 }
 </script>
+
 
 <style scoped lang="scss">
 @import '@/assets/styles/variables';
@@ -44,7 +65,7 @@ const submit = () => {
   margin-bottom: $space-lg;
   @include glass;
   padding: $space-md;
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
   gap: $space-md;
@@ -52,7 +73,7 @@ const submit = () => {
 
   h2 {
     font-family: $font-heading;
-    font-size: 1.75rem;
+    font-size: 1rem;
     text-align: center;
     @include gradient-text($primary, $secondary);
   }

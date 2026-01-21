@@ -60,7 +60,6 @@ const handleSubmit = async () => {
     await authStore.login({
       email: email.value,
       password: password.value,
-      rememberMe: rememberMe.value
     })
     router.push('/analyze')
   } catch (err: any) {
