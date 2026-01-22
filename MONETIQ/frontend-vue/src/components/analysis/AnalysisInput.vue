@@ -41,15 +41,13 @@ const submit = async () => {
   if (analysisStore.result) {
     emit('analysis-complete', {
       analysisDate: analysisStore.result.analysisDate,
-      suggestions: analysisStore.result.suggestions.map((s: { text: string }) => ({ text: s.text }))
-
+      suggestions: analysisStore.result.suggestions.map((s: string) => ({ text: s }))
     })
-
-
   }
 
   username.value = ''
 }
+
 </script>
 
 

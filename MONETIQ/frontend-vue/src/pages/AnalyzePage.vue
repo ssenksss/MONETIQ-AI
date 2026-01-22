@@ -1,6 +1,5 @@
 <template>
   <div class="analyze-page">
-
     <AnalysisInput @start-analysis="startAnalysis" />
 
     <AnalysisProcessing v-if="loading" />
@@ -11,10 +10,10 @@
   </div>
 </template>
 
-<script lang="ts" setup>
-import { storeToRefs } from 'pinia'
+<script lang="ts" setup>import { storeToRefs } from 'pinia'
 import { useAnalysisStore } from '@/stores/analysisStore'
-import { useProfileStore } from '@/stores/profileStore'
+import { useUserStore } from '@/stores/userStore'
+import { useAuthStore } from '@/stores/authStore'
 import { useRouter } from 'vue-router'
 
 import AnalysisInput from '@/components/analysis/AnalysisInput.vue'
@@ -23,19 +22,38 @@ import AnalysisResult from '@/components/analysis/AnalysisResult.vue'
 import AnalysisHistory from '@/components/analysis/AnalysisHistory.vue'
 
 const analysisStore = useAnalysisStore()
-const profileStore = useProfileStore()
+const userStore = useUserStore()
+const authStore = useAuthStore()
 const router = useRouter()
 
 const { result, history, loading } = storeToRefs(analysisStore)
+const { isAuthenticated } = storeToRefs(authStore)
 
 const startAnalysis = async (username: string) => {
-  await analysisStore.startAnalysis(username)
+  try {
+    await analysisStore.startAnalysis(username)
 
-  await profileStore.fetchProfile(username)
+    if (isAuthenticated.value) {
+      await userStore.fetchMe()
+    }
 
-  router.push('/profile')
+    router.push('/profile')
+  } catch (err: any) {
+    console.error('[AnalyzePage] startAnalysis failed', err)
+  }
 }
+
 </script>
+
+<style scoped lang="scss">
+.analyze-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+</style>
 
 
 <style scoped lang="scss">
@@ -43,7 +61,6 @@ const startAnalysis = async (username: string) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-
   gap: 1.5rem;
   padding: 2rem;
 }

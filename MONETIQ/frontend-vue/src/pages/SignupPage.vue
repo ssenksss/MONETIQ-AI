@@ -1,6 +1,6 @@
 <template>
   <section class="signup-section">
-    <img src="@/assets/logo-icon.svg" alt="MONETIQ AI" class="signup-logo" />
+    <img src="@/assets/logo-icon.png" alt="MONETIQ AI" class="signup-logo" />
     <h1>
       MONETIQ <span>AI</span>
     </h1>
@@ -92,7 +92,6 @@ const handleSubmit = async () => {
 
   loading.value = true
   try {
-    // Signup
     const payload: SignupPayload = {
       name: name.value,
       email: email.value,

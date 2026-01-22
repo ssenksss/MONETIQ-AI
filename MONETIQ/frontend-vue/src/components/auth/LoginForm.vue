@@ -1,18 +1,14 @@
 <template>
-  <section class="login-section">
-    <img src="@/assets/logo-icon.svg" alt="MONETIQ AI" class="login-logo" />
-    <h1>
-      MONETIQ <span>AI</span>
-    </h1>
-    <p class="subtitle">Sign in to access your Instagram analysis dashboard</p>
+  <section class="login-page">
+    <img src="@/assets/logo-icon.png" alt="MONETIQ AI" class="login-logo" />
+    <h1>MONETIQ <span>AI</span></h1>
+    <p class="subtitle">Sign in to your account</p>
 
     <form class="login-form" @submit.prevent="handleSubmit">
-
       <div class="form-group">
         <label for="email">Email</label>
         <input v-model="email" type="email" id="email" placeholder="you@example.com" required />
       </div>
-
 
       <div class="form-group">
         <label for="password">Password</label>
@@ -32,19 +28,24 @@
     </form>
 
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+
     <p class="signup-link">
       Don't have an account? <router-link to="/signup">Sign up</router-link>
     </p>
   </section>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+import { useUserStore } from '@/stores/userStore'
+import { useAnalysisStore } from '@/stores/analysisStore'
 import PrimaryButton from '@/components/ui/PrimaryButton.vue'
 
 const authStore = useAuthStore()
+const userStore = useUserStore()
+const analysisStore = useAnalysisStore()
 const router = useRouter()
 
 const email = ref('')
@@ -57,11 +58,15 @@ const handleSubmit = async () => {
   errorMessage.value = ''
   loading.value = true
   try {
-    await authStore.login({
-      email: email.value,
-      password: password.value,
-    })
-    router.push('/analyze')
+    await authStore.login(email.value, password.value)
+
+    analysisStore.reset()
+
+    await userStore.fetchMe()
+
+    if (userStore.role === 'PREMIUM') await router.push('/premium')
+    else if (userStore.role === 'ULTRA') await router.push('/ultra')
+    else await router.push('/free')
   } catch (err: any) {
     errorMessage.value = err.message || 'Login failed'
   } finally {
@@ -69,6 +74,7 @@ const handleSubmit = async () => {
   }
 }
 </script>
+
 
 <style scoped lang="scss">
 @import '@/assets/styles/variables';
@@ -91,6 +97,7 @@ const handleSubmit = async () => {
 
   h1 {
     font-size: 4rem;
+
     margin: $space-sm 0;
     @include gradient-text($primary, $secondary);
 

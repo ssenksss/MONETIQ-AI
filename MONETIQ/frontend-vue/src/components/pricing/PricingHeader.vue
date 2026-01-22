@@ -18,6 +18,8 @@
 
   h2 {
     font-size: 3rem;
+    font-family: $font-heading;
+
 
     background: linear-gradient(
             70deg,

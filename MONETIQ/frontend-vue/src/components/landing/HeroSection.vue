@@ -36,9 +36,12 @@ import PrimaryButton from '@/components/ui/PrimaryButton.vue'
 
   h1 {
     font-size: 5rem; margin: $space-sm 0;
+    font-family: $font-heading;
+
     @include gradient-text($primary, $secondary);
     span { font-size: 2rem; color: $accent;
       vertical-align: super; }
+
   }
 
   .subtitle {

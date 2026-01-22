@@ -24,10 +24,12 @@ export const useAnalysisStore = defineStore('analysis', () => {
                 `http://localhost:8080/api/profile/analyze?username=${username}`
             )
 
+            const analysisData = response.data.data
+
             const analysis: AnalysisResult = {
-                username: response.data.username,
-                analysisDate: response.data.analysisDate,
-                suggestions: response.data.suggestions
+                username: analysisData.username,
+                analysisDate: analysisData.analysisDate,
+                suggestions: analysisData.suggestions
             }
 
             result.value = { ...analysis }

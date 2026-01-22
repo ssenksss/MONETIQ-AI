@@ -7,18 +7,34 @@
       <li v-for="(f, i) in features" :key="i">✓ {{ f }}</li>
     </ul>
 
-    <button>{{ highlight ? 'Most Popular' : 'Get Started' }}</button>
+    <button @click="goToTier(tier)">
+      {{ highlight ? 'Most Popular' : 'Get Started' }}
+    </button>
+
   </div>
 </template>
 
 <script setup lang="ts">
-defineProps<{
+import { useRouter } from 'vue-router'
+
+const { tier, price, features, highlight } = defineProps<{
   tier: string
   price: string
   features: string[]
   highlight?: boolean
 }>()
+
+const router = useRouter()
+
+const goToTier = (tier: string) => {
+  if (tier === 'Free') router.push('/free')
+  else if (tier === 'Premium') router.push('/premium-test')
+  else if (tier === 'Ultra') router.push('/ultra-test')
+}
+
 </script>
+
+
 
 <style lang="scss" scoped>
 @import '@/assets/styles/variables.scss';

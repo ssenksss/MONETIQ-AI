@@ -1,6 +1,6 @@
 <template>
   <section class="login-page">
-    <img src="@/assets/logo-icon.svg" alt="MONETIQ AI" class="login-logo" />
+    <img src="@/assets/logo-icon.png" alt="MONETIQ AI" class="login-logo" />
     <h1>
       MONETIQ <span>AI</span>
     </h1>
@@ -36,29 +36,42 @@
     </p>
   </section>
 </template>
+
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
-import { useUserStore } from '@/stores/userStore'
+import { useUserStore, UserRole } from '@/stores/userStore'
 import PrimaryButton from '@/components/ui/PrimaryButton.vue'
 import { useAnalysisStore } from '@/stores/analysisStore'
 
 
+const authStore = useAuthStore()
+const userStore = useUserStore()
 const analysisStore = useAnalysisStore()
+const router = useRouter()
+
+
+const email = ref('')
+const password = ref('')
+const rememberMe = ref(false)
+const loading = ref(false)
+const errorMessage = ref('')
+
 
 const handleSubmit = async () => {
   errorMessage.value = ''
   loading.value = true
   try {
-    await authStore.login({ email: email.value, password: password.value })
+    await authStore.login(email.value, password.value)
 
     analysisStore.reset()
 
+
     await userStore.fetchMe()
 
-    if (userStore.role === 'PREMIUM_USER') await router.push('/premium')
-    else if (userStore.role === 'ULTRA_USER') await router.push('/ultra')
+    if (userStore.role === 'PREMIUM') await router.push('/premium')
+    else if (userStore.role === 'ULTRA') await router.push('/ultra')
     else await router.push('/free')
 
   } catch (err: any) {
@@ -68,19 +81,8 @@ const handleSubmit = async () => {
   }
 }
 
-
-const authStore = useAuthStore()
-const userStore = useUserStore()
-const router = useRouter()
-
-const email = ref('')
-const password = ref('')
-const rememberMe = ref(false)
-const loading = ref(false)
-const errorMessage = ref('')
-
-
 </script>
+
 
 
 <style scoped lang="scss">

@@ -1,12 +1,15 @@
 <template>
   <section class="signup-section">
-    <img src="@/assets/logo-icon.svg" alt="MONETIQ AI" class="signup-logo" />
-    <h1>
-      MONETIQ <span>AI</span>
-    </h1>
+    <img src="@/assets/logo-icon.png" alt="MONETIQ AI" class="signup-logo" />
+    <h1>MONETIQ <span>AI</span></h1>
     <p class="subtitle">Create your account to start analyzing Instagram profiles</p>
 
     <form class="signup-form" @submit.prevent="handleSubmit">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input v-model="name" type="text" id="name" placeholder="John Doe" required />
+      </div>
+
       <div class="form-group">
         <label for="email">Email</label>
         <input v-model="email" type="email" id="email" placeholder="you@example.com" required />
@@ -22,6 +25,20 @@
         <input v-model="confirmPassword" type="password" id="confirmPassword" placeholder="••••••••" required />
       </div>
 
+      <div class="form-group checkbox-group">
+        <label>
+          <input type="checkbox" v-model="acceptedTerms" required />
+          I agree to the <router-link to="/terms">Terms of Service</router-link> and <router-link to="/privacy">Privacy Policy</router-link>.
+        </label>
+      </div>
+
+      <div class="form-group checkbox-group">
+        <label>
+          <input type="checkbox" v-model="marketingOptIn" />
+          I want to receive occasional product updates and emails.
+        </label>
+      </div>
+
       <PrimaryButton type="submit" class="primary-btn" :disabled="loading">
         {{ loading ? 'Signing up...' : 'Sign Up' }}
       </PrimaryButton>
@@ -31,31 +48,60 @@
   </section>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+import { useUserStore } from '@/stores/userStore'
 import PrimaryButton from '@/components/ui/PrimaryButton.vue'
 
+interface SignupPayload {
+  name: string
+  email: string
+  password: string
+  marketingOptIn: boolean
+}
+
 const authStore = useAuthStore()
+const userStore = useUserStore()
 const router = useRouter()
 
+const name = ref('')
 const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
+const acceptedTerms = ref(false)
+const marketingOptIn = ref(false)
 const loading = ref(false)
 const errorMessage = ref('')
 
 const handleSubmit = async () => {
   errorMessage.value = ''
+
   if (password.value !== confirmPassword.value) {
     errorMessage.value = 'Passwords do not match'
     return
   }
+
+  if (!acceptedTerms.value) {
+    errorMessage.value = 'You must accept the terms and privacy policy'
+    return
+  }
+
   loading.value = true
   try {
-    await authStore.signup({ email: email.value, password: password.value })
-    router.push('/analyze')
+    const payload: SignupPayload = {
+      name: name.value,
+      email: email.value,
+      password: password.value,
+      marketingOptIn: marketingOptIn.value
+    }
+
+    await authStore.signup(payload)
+
+    await userStore.fetchMe()
+
+    await router.push('/analyze')
   } catch (err: any) {
     errorMessage.value = err.message || 'Signup failed'
   } finally {
@@ -63,6 +109,7 @@ const handleSubmit = async () => {
   }
 }
 </script>
+
 
 <style scoped lang="scss">
 @import '@/assets/styles/variables';
@@ -162,7 +209,6 @@ const handleSubmit = async () => {
   }
 }
 
-/* Responsive tweaks */
 @media (max-width: 480px) {
   .signup-form {
     padding: $space-md;
