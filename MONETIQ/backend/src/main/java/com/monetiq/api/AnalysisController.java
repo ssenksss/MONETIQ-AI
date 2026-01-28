@@ -18,13 +18,40 @@ public class AnalysisController {
     public AnalysisController(AnalysisService analysisService) {
         this.analysisService = analysisService;
     }
-
     @PostMapping
-    public ResponseEntity<ApiResponseDTO<AnalysisResponseDTO>> analyze(@RequestBody AnalysisRequestDTO request) {
+    public ResponseEntity<ApiResponseDTO<AnalysisResponseDTO>> analyze(
+            @RequestBody(required = false) AnalysisRequestDTO request
+    ) {
         try {
-            String plan = analysisService.generateAlphaPlan(request.getUsername());
-            AnalysisResponseDTO response = new AnalysisResponseDTO(request.getUsername(), plan, "FREE");
+            if (request == null || request.getUsername() == null || request.getUsername().trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .body(ApiResponseDTO.error("username is required"));
+            }
+
+            AnalysisResponseDTO response = analysisService.getOrGenerate(request.getUsername());
             return ResponseEntity.ok(ApiResponseDTO.success(response));
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest()
+                    .body(ApiResponseDTO.error(e.getMessage()));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponseDTO.error("Internal server error"));
+        }
+    }
+
+
+
+    @GetMapping("/{username}")
+    public ResponseEntity<ApiResponseDTO<AnalysisResponseDTO>> get(@PathVariable String username) {
+        try {
+            AnalysisResponseDTO existing = analysisService.getExisting(username);
+            if (existing == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ApiResponseDTO.error("No analysis found for username: " + username));
+            }
+            return ResponseEntity.ok(ApiResponseDTO.success(existing));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ApiResponseDTO.error(e.getMessage()));

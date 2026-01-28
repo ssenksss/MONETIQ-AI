@@ -3,18 +3,21 @@ package com.monetiq.model.dto;
 public class AuthResponseDTO {
 
     private String status;
-    private String role;
+    private String tier;
+    private Long userId;
 
-    public AuthResponseDTO(String status, String role) {
+    public AuthResponseDTO() {}
+
+    public AuthResponseDTO(String status, String tier) {
         this.status = status;
-        this.role = role;
+        this.tier = tier;
     }
 
-    public String getStatus() {
-        return status;
-    }
+    public String getStatus() { return status; }
+    public String getTier() { return tier; }
+    public Long getUserId() { return userId; }
 
-    public String getRole() {
-        return role;
-    }
+    public void setStatus(String status) { this.status = status; }
+    public void setTier(String tier) { this.tier = tier; }
+    public void setUserId(Long userId) { this.userId = userId; }
 }

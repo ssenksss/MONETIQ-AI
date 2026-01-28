@@ -1,30 +1,50 @@
- package com.monetiq.model;
+package com.monetiq.model;
 
+import jakarta.persistence.*;
+import java.time.Instant;
+
+@Entity
+@Table(name = "users")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String password;
-    private String role; // FREE, PREMIUM, ULTRA
+
+    // FREE / PREMIUM / ULTRA
+    @Column(nullable = false)
+    private String tier;
+
+    @Column(name = "created_at", nullable = false)
+    private Instant createdAt = Instant.now();
 
     public User() {}
+    public void setId(Long id) { this.id = id; }
 
-    public User(Long id, String email, String password, String role) {
-        this.id = id;
+    public User(String email, String password, String tier) {
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.tier = tier;
+        this.createdAt = Instant.now();
     }
 
     public Long getId() { return id; }
+
     public String getEmail() { return email; }
-    public String getPassword() { return password; }
-    public String getRole() { return role; }
-
-    public void setId(Long id) { this.id = id; }
     public void setEmail(String email) { this.email = email; }
+
+    public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
-    public void setRole(String role) { this.role = role; }
 
+    public String getTier() { return tier; }
+    public void setTier(String tier) { this.tier = tier; }
+
+    public Instant getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
 }
-

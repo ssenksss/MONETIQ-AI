@@ -1,13 +1,13 @@
 package com.monetiq.model.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class AnalysisResponseDTO {
 
     private String username;
     private String plan;
     private String tier;
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     public AnalysisResponseDTO() {}
 
@@ -15,22 +15,11 @@ public class AnalysisResponseDTO {
         this.username = username;
         this.plan = plan;
         this.tier = tier;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = Instant.now();
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPlan() {
-        return plan;
-    }
-
-    public String getTier() {
-        return tier;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    public String getUsername() { return username; }
+    public String getPlan() { return plan; }
+    public String getTier() { return tier; }
+    public Instant getCreatedAt() { return createdAt; }
 }
