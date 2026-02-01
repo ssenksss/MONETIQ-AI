@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/profiles")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:4200"})
 public class ProfileApiController {
 
     private final ProfileService profileService;
@@ -44,7 +44,6 @@ public class ProfileApiController {
     }
 
 
-    // LIST
     @GetMapping
     public ResponseEntity<ApiResponseDTO<Object>> list() {
         try {
@@ -54,7 +53,6 @@ public class ProfileApiController {
         }
     }
 
-    // GET by username
     @GetMapping("/{username}")
     public ResponseEntity<ApiResponseDTO<Profile>> get(@PathVariable String username) {
         try {

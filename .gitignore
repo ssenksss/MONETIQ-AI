@@ -1,7 +1,34 @@
-# macOS
+# dependencies
+**/node_modules/
+**/target/
+.DS_Store
 **/.DS_Store
+.idea/
 
-# Node
-node_modules/
-package-lock.json
+# build outputs
+**/dist/
+**/build/
+**/.angular/
+**/.vite/
 
+# env
+**/.env
+**/.env.*
+
+# logs
+**/*.log
+
+# OS / IDE
+
+**/*.iml
+
+# Redis dump / local artifacts
+dump.rdb
+**/dump.rdb
+LRANGE
+# package managers
+**/yarn.lock
+**/pnpm-lock.yaml
+
+# misc
+**/.cache/

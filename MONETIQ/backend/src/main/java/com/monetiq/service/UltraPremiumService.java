@@ -13,7 +13,10 @@ public class UltraPremiumService {
     private final UltraRequestRepository ultraRequestRepository;
     private final RedisTemplate<String, String> redisTemplate;
 
-    public UltraPremiumService(UltraRequestRepository ultraRequestRepository, RedisTemplate<String, String> redisTemplate) {
+    public UltraPremiumService(
+            UltraRequestRepository ultraRequestRepository,
+            RedisTemplate<String, String> redisTemplate
+    ) {
         this.ultraRequestRepository = ultraRequestRepository;
         this.redisTemplate = redisTemplate;
     }
@@ -25,12 +28,16 @@ public class UltraPremiumService {
         request.setRequestDate(LocalDateTime.now());
         request.setStatus("pending");
 
-
         ultraRequestRepository.save(request);
 
+        try {
+            redisTemplate
+                    .opsForList()
+                    .rightPush("ultra_requests", username + ": " + description);
+        } catch (Exception e) {
+            System.out.println("⚠️ Redis push failed: " + e.getMessage());
+        }
 
-        redisTemplate.opsForList().rightPush("ultra_requests", username + ": " + description);
-
-        return "Our team will review your request.";
+        return "Our team will review your request and contact you.";
     }
 }

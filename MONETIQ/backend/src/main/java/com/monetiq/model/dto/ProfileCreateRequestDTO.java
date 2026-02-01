@@ -2,7 +2,7 @@ package com.monetiq.model.dto;
 
 public class ProfileCreateRequestDTO {
     private String username;
-    private String platform; // "instagram" itd.
+    private String platform;
 
     public ProfileCreateRequestDTO() {}
 

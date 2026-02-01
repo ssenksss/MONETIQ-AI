@@ -7,6 +7,7 @@ import java.time.Instant;
 @Table(name = "users")
 public class User {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,9 +18,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    // FREE / PREMIUM / ULTRA
     @Column(nullable = false)
     private String tier;
+
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
