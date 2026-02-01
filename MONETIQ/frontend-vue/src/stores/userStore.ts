@@ -4,71 +4,100 @@ import { ref } from 'vue'
 
 export type UserRole = 'FREE' | 'PREMIUM' | 'ULTRA'
 
-export interface PremiumTask { day: number; text: string }
-export interface UserPlan { tier: UserRole; items: PremiumTask[] }
+export interface PremiumItem { day: number; text: string }
+
+export interface PremiumDay {
+    day: number
+    title: string
+    contentType: string
+    tasks: string[]
+}
+
+export interface PremiumPlan {
+    username: string
+    tier: UserRole
+    planText: string
+    days: PremiumDay[]
+    items: PremiumItem[]
+    createdAt: string
+}
+
 export interface Suggestion { text: string }
-export interface UserProfile { analysisDate: string; suggestions: Suggestion[] }
+export interface UserProfile { analysisDate: string | null; suggestions: Suggestion[] | null }
+
+const mapRole = (r: string): UserRole => {
+    const s = (r || '').toUpperCase()
+    if (s.includes('PREMIUM')) return 'PREMIUM'
+    if (s.includes('ULTRA')) return 'ULTRA'
+    return 'FREE'
+}
 
 export const useUserStore = defineStore('user', () => {
     const username = ref<string | null>(null)
     const role = ref<UserRole | null>(null)
     const profile = ref<UserProfile | null>(null)
-    const plan = ref<UserPlan | null>(null)
+
+    const plan = ref<PremiumPlan | null>(null)
+
     const isLoaded = ref(false)
     const me = ref<any>(null)
     const error = ref<string>('')
 
     const fetchMe = async () => {
-        const token = localStorage.getItem('token')
-
-        if (!token) {
-            console.warn('[fetchMe] no token, skipping /me')
-            reset()
-            return
-        }
-
         try {
             const res = await api.get('/me')
-            me.value = res.data
-            username.value = res.data.username
-            role.value = res.data.role
-            profile.value = res.data.profile
-            plan.value = res.data.plan
+
+            const data = res.data?.data
+            if (!data) {
+                throw new Error('Invalid /me response: missing data')
+            }
+
+            me.value = data
+            username.value = data.username ?? null
+            role.value = mapRole(data.role ?? '')
+            profile.value = data.profile ?? null
+
+            return data
         } catch (err: any) {
-            console.warn('[fetchMe] user not authenticated or not found', err)
+            console.warn('[fetchMe] /me failed', err?.response?.status, err?.response?.data)
             reset()
-            localStorage.removeItem('token')
+            throw err
         } finally {
             isLoaded.value = true
         }
     }
 
-    const fetchPremiumPlan = async () => {
-        try {
-            const res = await api.get('/plans/premium')
-            // ApiResponseDTO je tipa { success: boolean, data: ..., error: string | null }
-            // Dakle, pravi plan je u res.data.data
-            plan.value = res.data.data
-        } catch (e) {
-            console.error('fetchPremiumPlan failed', e)
-        }
+    const fetchPremiumPlan = async (u: string) => {
+        const res = await api.get('/premium/plan', { params: { username: u } })
+        plan.value = res.data?.data ?? null
+        return plan.value
     }
-    const fetchGeneratedPlan = async (username: string) => {
-        try {
-            const res = await api.get(`/premium/generate-plan?username=${username}`)
-            // res.data.data je string JSON-a, parsiramo ga u objekt
-            const parsed = JSON.parse(res.data.data)
-            // backend vraća: { username, generatedDate, plan: [ { day, task } ] }
-            plan.value = {
-                tier: 'PREMIUM',
-                items: parsed.plan.map((p: any) => ({ day: p.day.replace('Day ', ''), text: p.task }))
+    const upgradeToPremium = async () => {
+        const token = localStorage.getItem('token')
+        if (!token) throw new Error('Not authenticated')
+
+        await api.post(
+            '/user/upgrade/premium',
+            null,
+            {
+                headers: { Authorization: `Bearer ${token}` }
             }
-        } catch (e) {
-            console.error('fetchGeneratedPlan failed', e)
-        }
+        )
+
+        await fetchMe()
     }
+    const upgradeToUltra = async () => {
+        const token = localStorage.getItem('token')
+        if (!token) throw new Error('Not authenticated')
 
+        await api.post(
+            '/user/upgrade/ultra',
+            null,
+            { headers: { Authorization: `Bearer ${token}` } }
+        )
 
+        await fetchMe()
+    }
 
     const setProfile = (analysis: UserProfile) => {
         profile.value = analysis
@@ -84,5 +113,19 @@ export const useUserStore = defineStore('user', () => {
         error.value = ''
     }
 
-    return { username, role, profile, plan, isLoaded, me, error, fetchMe, fetchPremiumPlan,fetchGeneratedPlan, setProfile, reset }
+    return {
+        username,
+        role,
+        profile,
+        plan,
+        isLoaded,
+        me,
+        error,
+        fetchMe,
+        fetchPremiumPlan,
+        setProfile,
+        reset,
+        upgradeToPremium,
+        upgradeToUltra
+    }
 })

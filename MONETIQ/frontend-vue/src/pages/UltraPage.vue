@@ -1,11 +1,7 @@
 <template>
   <UltraTier />
   <SectionWrapper>
-    <div class="ultra-hero">
-      <h1>Ultra Premium</h1>
-      <p>Apply for the elite strategy plan for top creators.</p>
-      <PrimaryButton @click="goRequest">Apply Now</PrimaryButton>
-    </div>
+
 
     <div class="features">
       <GlassCard v-for="feature in features" :key="feature.title">

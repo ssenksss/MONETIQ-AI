@@ -20,6 +20,8 @@ import AnalysisInput from '@/components/analysis/AnalysisInput.vue'
 import AnalysisProcessing from '@/components/analysis/AnalysisProcessing.vue'
 import AnalysisResult from '@/components/analysis/AnalysisResult.vue'
 import AnalysisHistory from '@/components/analysis/AnalysisHistory.vue'
+import { onMounted } from 'vue'
+
 
 const analysisStore = useAnalysisStore()
 const userStore = useUserStore()
@@ -42,6 +44,12 @@ const startAnalysis = async (username: string) => {
     console.error('[AnalyzePage] startAnalysis failed', err)
   }
 }
+onMounted(async () => {
+  try {
+    await analysisStore.fetchHistory()
+  } catch (e) {
+  }
+})
 
 </script>
 

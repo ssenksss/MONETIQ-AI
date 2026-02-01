@@ -15,8 +15,14 @@
         </ul>
 
         <div class="cta-buttons">
-          <button class="sign-in" @click="goSignIn">Sign In</button>
-          <PrimaryButton @click="goGetStarted">Get Started</PrimaryButton>
+          <template v-if="!auth.isAuthenticated">
+            <button class="sign-in" @click="goSignIn">Sign In</button>
+            <PrimaryButton @click="goGetStarted">Get Started</PrimaryButton>
+          </template>
+
+          <template v-else>
+            <button class="sign-in" @click="doLogout">Logout</button>
+          </template>
         </div>
       </nav>
 
@@ -34,8 +40,15 @@
           <li><button @click="goHowItWorks">How It Works</button></li>
           <li><button @click="goPricing">Pricing</button></li>
           <li><button @click="goResources">Resources</button></li>
-          <li><button class="sign-in" @click="goSignIn">Sign In</button></li>
-          <li><button class="get-started" @click="goGetStarted">Get Started</button></li>
+
+          <template v-if="!auth.isAuthenticated">
+            <li><button class="sign-in" @click="goSignIn">Sign In</button></li>
+            <li><button class="get-started" @click="goGetStarted">Get Started</button></li>
+          </template>
+
+          <template v-else>
+            <li><button class="sign-in" @click="doLogout">Logout</button></li>
+          </template>
         </ul>
       </div>
     </transition>
@@ -46,11 +59,16 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import PrimaryButton from '@/components/ui/PrimaryButton.vue'
+import { useAuthStore } from '@/stores/authStore'
 
 const router = useRouter()
+const auth = useAuthStore()
+
 const isMobile = ref(false)
 const mobileMenuOpen = ref(false)
+
 const toggleMobileMenu = () => (mobileMenuOpen.value = !mobileMenuOpen.value)
+const closeMobileMenu = () => (mobileMenuOpen.value = false)
 const checkMobile = () => (isMobile.value = window.innerWidth < 768)
 
 onMounted(() => {
@@ -58,15 +76,26 @@ onMounted(() => {
   window.addEventListener('resize', checkMobile)
 })
 
+const goHome = () => { closeMobileMenu(); router.push('/') }
 
-const goHome = () => router.push('/')
-const goProduct = () => router.push('/product')
-const goHowItWorks = () => router.push('/how-it-works')
-const goPricing = () => router.push('/pricing')
-const goResources = () => router.push('/resources')
-const goSignIn = () => router.push('/login')
-const goGetStarted = () => router.push('/signup')
+const goProduct = () => { closeMobileMenu(); router.push({ path: '/', hash: '#product' }) }
+
+const goHowItWorks = () => { closeMobileMenu(); router.push('/how-it-works') }
+
+const goPricing = () => { closeMobileMenu(); router.push('/pricing') }
+const goResources = () => { closeMobileMenu(); router.push('/resources') }
+
+const goSignIn = () => { closeMobileMenu(); router.push('/login') }
+
+const goGetStarted = () => { closeMobileMenu(); router.push('/signup') }
+
+const doLogout = () => {
+  auth.logout()
+  closeMobileMenu()
+  router.push('/')
+}
 </script>
+
 
 <style lang="scss" scoped>
 @import '@/assets/styles/variables';

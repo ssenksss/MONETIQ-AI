@@ -1,13 +1,23 @@
 <template>
   <section class="cta-section">
     <h2>Ultra Premium</h2>
-    <p>Apply now for an elite strategy plan designed for top creators.</p>
-    <PrimaryButton @click="$emit('applyUltra')">Apply</PrimaryButton>
+    <p>Request a custom-built digital product based on your audience, positioning, and monetization goals.</p>
+
+    <PrimaryButton @click="goToPricing">
+      Apply
+    </PrimaryButton>
   </section>
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import PrimaryButton from '@/components/ui/PrimaryButton.vue'
+
+const router = useRouter()
+
+const goToPricing = () => {
+  router.push('/pricing')
+}
 </script>
 
 <style lang="scss" scoped>

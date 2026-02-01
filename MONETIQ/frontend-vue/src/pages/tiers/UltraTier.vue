@@ -2,24 +2,51 @@
   <SectionWrapper>
     <section class="tier-page">
       <h2>Ultra Premium: Digital Product Request</h2>
-      <form @submit.prevent="submitRequest">
+
+      <form v-if="!submitted" @submit.prevent="submitRequest">
         <label>
-          Your Name:
-          <input type="text" v-model="name" required />
+          Creator username / handle:
+          <input
+              type="text"
+              v-model="name"
+              required
+              placeholder="@mark.art"
+          />
         </label>
+
         <label>
           Email:
-          <input type="email" v-model="email" required />
+          <input
+              type="email"
+              v-model="email"
+              required
+              placeholder="mark@gmail.com"
+          />
         </label>
+
         <label>
           Idea Description:
-          <textarea v-model="idea" required></textarea>
+          <textarea
+              v-model="idea"
+              required
+              placeholder="Describe your digital product idea..."
+          ></textarea>
         </label>
-        <PrimaryButton type="submit">Submit Request</PrimaryButton>
+
+        <p v-if="error" class="error-msg">{{ error }}</p>
+
+        <PrimaryButton type="submit" :disabled="loading">
+          {{ loading ? 'Sending...' : 'Submit Request' }}
+        </PrimaryButton>
       </form>
-      <p v-if="submitted" class="submitted-msg">
-        Our team will review your request.
-      </p>
+
+      <div v-else class="submitted-msg">
+        Our team will review your request and contact you soon.
+
+        <PrimaryButton class="mt-btn" type="button" @click="resetForm">
+          Send another request
+        </PrimaryButton>
+      </div>
     </section>
   </SectionWrapper>
 </template>
@@ -28,14 +55,61 @@
 import SectionWrapper from '@/components/layout/SectionWrapper.vue'
 import PrimaryButton from '@/components/ui/PrimaryButton.vue'
 import { ref } from 'vue'
+import api from '@/api/axios'
 
 const name = ref('')
 const email = ref('')
 const idea = ref('')
 const submitted = ref(false)
 
-function submitRequest() {
-  submitted.value = true
+const loading = ref(false)
+const error = ref('')
+
+function validate() {
+  error.value = ''
+
+  if (name.value.trim().length < 3) {
+    error.value = 'Username is too short.'
+    return false
+  }
+  if (!email.value.includes('@')) {
+    error.value = 'Invalid email.'
+    return false
+  }
+  if (idea.value.trim().length < 5) {
+    error.value = 'Idea is too short.'
+    return false
+  }
+
+  return true
+}
+
+async function submitRequest() {
+  if (loading.value) return
+  if (!validate()) return
+
+  loading.value = true
+  try {
+    await api.post('/ultra/request', {
+      username: name.value.trim(),
+      description: `Email: ${email.value.trim()}\n\nIdea: ${idea.value.trim()}`,
+    })
+
+    submitted.value = true
+  } catch (e) {
+    console.error(e)
+    error.value = 'Neuspešno slanje zahteva.'
+  } finally {
+    loading.value = false
+  }
+}
+
+function resetForm() {
+  name.value = ''
+  email.value = ''
+  idea.value = ''
+  submitted.value = false
+  error.value = ''
 }
 </script>
 
@@ -82,6 +156,20 @@ function submitRequest() {
       font-weight: 200;
       font-size: 1rem;
     }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+  }
+
+  .error-msg {
+    width: 100%;
+    font-family: $font-heading;
+    font-weight: 200;
+    font-size: 0.95rem;
+    color: #ff6b6b;
+    margin-bottom: $space-sm;
   }
 
   .submitted-msg {
@@ -92,6 +180,10 @@ function submitRequest() {
     margin-top: $space-md;
     text-align: center;
     line-height: 1.5;
+  }
+
+  .mt-btn {
+    margin-top: $space-md;
   }
 
   button {

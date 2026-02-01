@@ -26,7 +26,7 @@ const routes = [
     { path: '/about', name: 'About', component: AboutPage },
     { path: '/careers', name: 'Careers', component: CareersPage },
     { path: '/contact', name: 'Contact', component: ContactPage },
-    { path: '/free', name: 'Free', component: FreeTier },
+    { path: '/free', name: 'Free', component: FreeTier, meta: { requiresAuth: true } },
 
     { path: '/profile', component: ProfilePage, meta: { requiresAuth: true } },
     { path: '/premium', name: 'Premium', component: PremiumPage, meta: { requiresAuth: true, requiresPremium: true } },
@@ -40,8 +40,6 @@ const routes = [
     { path: '/security', name: 'Security', component: SecurityPage },
     { path: '/resources', name: 'Resources', component: ResourcesPage },
     { path: '/pricing', name: 'Pricing', component: PricingSection },
-    { path: '/premium-test', name: 'PremiumTest', component: PremiumPage },
-    { path: '/ultra-test', name: 'UltraTest', component: UltraPage },
 
 
     { path: '/:pathMatch(.*)*', redirect: '/' }
@@ -68,8 +66,9 @@ router.beforeEach(async (to) => {
         }
     }
 
-    if (to.meta.requiresPremium && user.role !== 'PREMIUM' && user.role !== 'ULTRA') return '/'
-    if (to.meta.requiresUltra && user.role !== 'ULTRA') return '/'
+    if (to.meta.requiresPremium && user.role !== 'PREMIUM' && user.role !== 'ULTRA') return '/pricing'
+    if (to.meta.requiresUltra && user.role !== 'ULTRA') return '/pricing'
+
 
 })
 

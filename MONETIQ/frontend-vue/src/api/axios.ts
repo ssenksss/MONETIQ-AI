@@ -1,19 +1,27 @@
-import axios from 'axios'
+import axios, {
+    type AxiosInstance,
+    type InternalAxiosRequestConfig
+} from 'axios'
+
 import { useAuthStore } from '@/stores/authStore'
 
-const api = axios.create({
+const api: AxiosInstance = axios.create({
     baseURL: 'http://localhost:8080/api',
-    withCredentials: true,
+    withCredentials: false,
 })
 
-api.interceptors.request.use((config) => {
-    const auth = useAuthStore()
-    if (auth.token && config.headers) {
-        config.headers.Authorization = `Bearer ${auth.token}`
-    }
-    return config
-}, (error) => {
-    return Promise.reject(error)
-})
+api.interceptors.request.use(
+    (config: InternalAxiosRequestConfig) => {
+        const auth = useAuthStore()
+
+        if (auth.token) {
+            config.headers = config.headers ?? {}
+            config.headers.Authorization = `Bearer ${auth.token}`
+        }
+
+        return config
+    },
+    (error) => Promise.reject(error)
+)
 
 export default api

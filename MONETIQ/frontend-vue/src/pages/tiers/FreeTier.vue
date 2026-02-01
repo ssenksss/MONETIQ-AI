@@ -6,26 +6,41 @@
       <h2>Profile Snapshot</h2>
       <p class="subtitle">A quick overview of your Instagram performance.</p>
 
-      <div v-if="!hasProfile">
-        <AnalysisInput @analysis-complete="onAnalysisComplete" />
+      <div class="input-wrap">
+        <AnalysisInput />
       </div>
 
-      <div v-else class="profile-data">
-        <p><strong>Username:</strong> {{ userStore.username }}</p>
+      <div v-if="hasLatest" class="profile-data">
+        <p><strong>Username:</strong> {{ analysisStore.result?.username }}</p>
 
         <ul>
-          <li v-for="s in userStore.profile?.suggestions" :key="s.text">
-            {{ s.text }}
+          <li v-for="(s, i) in (analysisStore.result?.suggestions ?? [])" :key="i">
+            {{ s }}
           </li>
         </ul>
-
 
         <p class="analysis-date">
           Analysis Date: {{ formattedDate }}
         </p>
       </div>
 
-      <div class="upgrade-hint">
+      <div v-else class="empty-state">
+        No analysis yet. Enter a username above to run your first analysis.
+      </div>
+
+      <div v-if="analysisStore.history.length" class="history">
+        <h3>History</h3>
+        <ul>
+          <li v-for="(h, idx) in analysisStore.history" :key="idx">
+            <span class="h-user">{{ h.username }}</span>
+            <span class="h-date">
+              {{ h.analysisDate ? new Date(h.analysisDate).toLocaleString() : '' }}
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="upgrade-hint" v-if="userStore.role === 'FREE'">
         Want deeper insights?
         <span @click="goPremium">Upgrade to Premium</span>
       </div>
@@ -34,9 +49,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
+import { useAnalysisStore } from '@/stores/analysisStore'
 
 import SectionWrapper from '@/components/layout/SectionWrapper.vue'
 import GlassCard from '@/components/ui/GlassCard.vue'
@@ -44,24 +60,27 @@ import Badge from '@/components/ui/Badge.vue'
 import AnalysisInput from '@/components/analysis/AnalysisInput.vue'
 
 const userStore = useUserStore()
+const analysisStore = useAnalysisStore()
 const router = useRouter()
 
-const hasProfile = computed(() => userStore.profile !== null)
+onMounted(async () => {
+  try {
+    await analysisStore.fetchLatest()
+    await analysisStore.fetchHistory()
+  } catch (e) {
+    console.warn('[FreeTier] load latest/history failed', e)
+  }
+})
+
+const hasLatest = computed(() => analysisStore.result !== null)
 
 const formattedDate = computed(() => {
-  if (!userStore.profile?.analysisDate) return ''
-  return new Date(userStore.profile.analysisDate).toLocaleString()
+  if (!analysisStore.result?.analysisDate) return ''
+  return new Date(analysisStore.result.analysisDate).toLocaleString()
 })
-const onAnalysisComplete = (payload: {
-  analysisDate: string
-  suggestions: { text: string }[]
-}) => {
-  userStore.setProfile(payload)
-}
 
-const goPremium = () => router.push('/premium')
+const goPremium = () => router.push('/pricing')
 </script>
-
 
 <style lang="scss" scoped>
 @import '@/assets/styles/variables';
@@ -89,6 +108,17 @@ const goPremium = () => router.push('/premium')
     line-height: 1.5;
     margin-bottom: $space-md;
     padding-bottom: 1rem;
+  }
+
+  .input-wrap {
+    margin-bottom: $space-md;
+  }
+
+  .empty-state {
+    margin-top: $space-md;
+    font-family: $font-heading;
+    font-weight: 200;
+    color: $text-muted;
   }
 
   .profile-data {
@@ -130,6 +160,46 @@ const goPremium = () => router.push('/premium')
           left: 0;
           color: $primary;
         }
+      }
+    }
+  }
+
+  .history {
+    margin-top: $space-lg;
+    text-align: left;
+
+    h3 {
+      font-family: $font-heading;
+      font-weight: 600;
+      margin-bottom: $space-sm;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: $space-xs;
+
+      li {
+        display: flex;
+        justify-content: space-between;
+        gap: $space-sm;
+        padding: $space-xs $space-sm;
+        border-radius: $radius-sm;
+        background: rgba(255,255,255,0.04);
+      }
+
+      .h-user {
+        font-family: $font-mono;
+        color: $text-main;
+      }
+
+      .h-date {
+        font-family: $font-mono;
+        color: $text-muted;
+        font-size: 0.85rem;
       }
     }
   }

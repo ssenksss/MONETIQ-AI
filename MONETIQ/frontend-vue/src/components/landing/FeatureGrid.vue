@@ -4,16 +4,18 @@
     <section class="feature-grid">
     <h2>Free Tier Insights</h2>
     <div class="grid">
-      <InsightCard title="Engagement" description="Track likes, comments, and shares." icon="📊" />
-      <InsightCard title="Growth" description="See follower trends and growth potential." icon="📈" />
-      <InsightCard title="Content" description="Analyze which posts perform best." icon="🖼️" />
-      <InsightCard title="Posting Times" description="Discover optimal posting schedule." icon="⏰" />
+      <InsightCard title="Engagement" description="Track likes, comments, and shares." icon="/src/assets/engagement.png" />
+      <InsightCard title="Growth" description="See follower trends and growth potential." icon="/src/assets/growth.png" />
+      <InsightCard title="Content" description="Analyze which posts perform best." icon="/src/assets/content.png"/>
+      <InsightCard title="Posting Times" description="Discover optimal posting schedule." icon="/src/assets/time-posting.png" />
+
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
 import InsightCard from './InsightCard.vue'
+
 </script>
 
 <style lang="scss" scoped>

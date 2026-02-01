@@ -32,6 +32,7 @@ onMounted(async () => {
     } catch (e) {
       console.error('fetchMe failed', e)
       userStore.reset()
+      authStore.logout()
     }
   }
   isReady.value = true

@@ -72,7 +72,9 @@ const handleSubmit = async () => {
 
     if (userStore.role === 'PREMIUM') await router.push('/premium')
     else if (userStore.role === 'ULTRA') await router.push('/ultra')
-    else await router.push('/free')
+    else await router.push('/pricing')
+
+
 
   } catch (err: any) {
     errorMessage.value = err.message || 'Login failed'

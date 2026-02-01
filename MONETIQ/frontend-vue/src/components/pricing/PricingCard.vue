@@ -16,6 +16,8 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
+import { useUserStore } from '@/stores/userStore'
 
 const { tier, price, features, highlight } = defineProps<{
   tier: string
@@ -25,13 +27,34 @@ const { tier, price, features, highlight } = defineProps<{
 }>()
 
 const router = useRouter()
+const authStore = useAuthStore()
+const userStore = useUserStore()
 
-const goToTier = (tier: string) => {
-  if (tier === 'Free') router.push('/free')
-  else if (tier === 'Premium') router.push('/premium-test')
-  else if (tier === 'Ultra') router.push('/ultra-test')
+const goToTier = async (tier: string) => {
+  if (!authStore.token && (tier === 'Premium' || tier === 'Ultra')) {
+    router.push('/login')
+    return
+  }
+
+  if (tier === 'Free') {
+    router.push('/free')
+    return
+  }
+
+  if (tier === 'Premium') {
+    await userStore.upgradeToPremium()
+    await userStore.fetchMe()
+    router.push('/premium')
+    return
+  }
+
+  if (tier === 'Ultra') {
+    await userStore.upgradeToUltra()
+    router.push('/ultra')
+    return
+  }
+
 }
-
 </script>
 
 

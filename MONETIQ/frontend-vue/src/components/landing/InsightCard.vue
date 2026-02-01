@@ -1,6 +1,6 @@
 <template>
   <GlassCard class="insight-card">
-    <div class="icon">{{ icon }}</div>
+    <img :src="icon" alt="" class="icon" />
     <h3>{{ title }}</h3>
     <p>{{ description }}</p>
   </GlassCard>
@@ -29,8 +29,10 @@ const props = defineProps<Props>()
   @include hover-glow;
 
   .icon {
-    font-size: 2rem;
-    margin-bottom: $space-sm;
+    width: 108px;
+    height: 108px;
+    margin-bottom: 12px;
+    object-fit: contain;
   }
 
   h3 {
@@ -38,7 +40,8 @@ const props = defineProps<Props>()
     font-weight: 700;
     font-size: 1.3rem;
     margin-bottom: $space-xs;
-    color: $primary;
+    @include gradient-text($primary, $secondary);
+
   }
 
   p {
