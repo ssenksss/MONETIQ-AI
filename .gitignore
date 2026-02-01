@@ -32,3 +32,5 @@ LRANGE
 
 # misc
 **/.cache/
+.DS_Store
+**/.DS_Store
