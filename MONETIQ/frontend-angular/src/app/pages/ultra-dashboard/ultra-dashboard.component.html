@@ -1,0 +1,67 @@
+<div class="page">
+  <div class="header">
+    <div class="title">
+      <div class="kicker">ULTRA PREMIUM</div>
+      <h1>Requests</h1>
+      <p class="sub">Review, update status, and keep the pipeline moving.</p>
+    </div>
+  </div>
+
+  <div class="controls">
+    <input
+            class="input"
+            type="text"
+            placeholder="Search (username / description)"
+            [(ngModel)]="search"
+            (keydown.enter)="apply()"
+    />
+
+    <select class="select" [(ngModel)]="status">
+      <option *ngFor="let s of statuses" [value]="s">{{ s === 'ALL' ? 'All statuses' : s }}</option>
+    </select>
+
+    <button class="btn" (click)="apply()" [disabled]="loading">
+      {{ loading ? 'Loading...' : 'Apply' }}
+    </button>
+  </div>
+
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div class="table">
+    <div class="row head">
+      <div>USERNAME</div>
+      <div>DESCRIPTION</div>
+      <div>CREATED</div>
+      <div>STATUS</div>
+      <div>ACTION</div>
+    </div>
+
+    <div class="row" *ngFor="let r of rows; trackBy: trackById">
+      <div class="mono">{{ r.username }}</div>
+
+      <div class="dim desc">{{ r.description || '-' }}</div>
+
+      <div class="dim">{{ fmt(r.requestDate) }}</div>
+
+      <div>
+        <span class="badge">{{ normStatus(r.status) }}</span>
+      </div>
+
+      <div>
+        <select
+                class="select small"
+                [ngModel]="normStatus(r.status)"
+                (ngModelChange)="setStatus(r.id, normStatus($event))"
+        >
+          <option *ngFor="let s of statuses" [ngValue]="s" [disabled]="s === 'ALL'">
+            {{ s }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="empty" *ngIf="!loading && rows.length === 0">
+      No requests found.
+    </div>
+  </div>
+</div>

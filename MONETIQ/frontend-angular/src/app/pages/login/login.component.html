@@ -1,0 +1,23 @@
+<div class="wrap">
+    <div class="card glass hover-glow">
+        <div class="brand">
+            <div class="kicker mono">MONETIQ ADMIN</div>
+            <div class="title gradient-text">Sign in</div>
+            <div class="sub">Manage Ultra Premium requests & queue.</div>
+        </div>
+
+        <form (ngSubmit)="submit()" class="form">
+            <label class="label">Email</label>
+            <input class="input" [(ngModel)]="email" name="email" type="email" required>
+
+            <label class="label">Password</label>
+            <input class="input" [(ngModel)]="password" name="password" type="password" required>
+
+            <button class="btn" [disabled]="loading">
+                {{ loading ? 'Signing in...' : 'Login' }}
+            </button>
+
+            <p class="err" *ngIf="error">{{ error }}</p>
+        </form>
+    </div>
+</div>
