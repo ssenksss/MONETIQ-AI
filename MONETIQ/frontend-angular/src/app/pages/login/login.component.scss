@@ -1,0 +1,52 @@
+.wrap {
+  min-height: calc(100vh - 2rem);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.card {
+  width: min(520px, 100%);
+  padding: 1.4rem 1.4rem 1.2rem;
+}
+
+.brand {
+  text-align: center;
+  margin-bottom: 1rem;
+
+  .kicker {
+    color: var(--muted);
+    letter-spacing: 0.18em;
+    font-size: 0.75rem;
+  }
+  .title {
+    margin-top: 0.35rem;
+    font-weight: 950;
+    font-size: 2.4rem;
+    line-height: 1.05;
+  }
+  .sub {
+    margin-top: 0.5rem;
+    color: var(--muted);
+    font-weight: 300;
+  }
+}
+
+.form {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.label {
+  font-weight: 700;
+  color: rgba(255,255,255,0.84);
+  font-size: 0.9rem;
+}
+
+.err {
+  margin: 0.5rem 0 0;
+  color: var(--accent);
+  font-weight: 700;
+  text-align: center;
+}
