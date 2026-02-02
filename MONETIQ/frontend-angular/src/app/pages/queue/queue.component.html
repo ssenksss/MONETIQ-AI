@@ -1,0 +1,48 @@
+<div class="page">
+    <div
+            class="header"
+            style="display:flex;align-items:center;justify-content:space-between"
+    >
+        <div>
+            <div style="opacity:.7;font-size:.85rem">REDIS</div>
+            <h1 style="margin:0">Ultra Queue</h1>
+            <div style="opacity:.7">Preview what's waiting in ultra_requests.</div>
+        </div>
+
+        <button class="btn" (click)="refresh()" [disabled]="loading">
+            {{ loading ? 'Refreshing...' : 'Refresh' }}
+        </button>
+    </div>
+
+    <div *ngIf="error" class="error" style="margin:12px 0">
+        {{ error }}
+    </div>
+
+    <div *ngIf="loading" style="opacity:.8;margin-top:12px">
+        Loading queue...
+    </div>
+
+    <div *ngIf="!loading && items.length === 0" class="empty" style="opacity:.8;margin-top:12px">
+        Queue is empty.
+    </div>
+
+    <div
+            *ngIf="items.length > 0"
+            class="list"
+            style="margin-top:12px;display:grid;gap:10px"
+    >
+        <div
+                class="card"
+                *ngFor="let it of items; let i = index"
+                style="padding:12px;border-radius:12px;background:rgba(255,255,255,.06)"
+        >
+            <div class="mono" style="opacity:.7;margin-bottom:6px">
+                #{{ items.length - i }}
+            </div>
+
+            <div class="content">
+                <div *ngFor="let l of lines(it)">{{ l }}</div>
+            </div>
+        </div>
+    </div>
+</div>
